@@ -1,0 +1,429 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Prove API",
+    "version": "3.0"
+  },
+  "request": {
+    "auth": {
+      "type": "bearer",
+      "token": "{{bearerToken}}"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Authentication",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Issue an OAuth 2.0 access token",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.prove.com/v3/token",
+            "body": {
+              "type": "urlencoded",
+              "data": "grant_type=client_credentials&client_id={{CLIENT_ID}}&client_secret={{CLIENT_SECRET}}"
+            }
+          },
+          "docs": "Exchange a client ID and secret for a short-lived Bearer access token using the OAuth 2.0 client-credentials grant."
+        }
+      ]
+    },
+    {
+      "info": {
+        "name": "Identity Verification (v3 Flows)",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Start a Pre-Fill verification flow",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.prove.com/v3/start",
+            "body": {
+              "type": "json",
+              "data": "{\"flowType\":\"mobile\",\"phoneNumber\":\"2001001695\",\"finalTargetUrl\":\"https://prove.com\",\"smsMessage\":\"Customizable sms message. Code: ####\"}"
+            }
+          },
+          "docs": "Initiates the identity verification session and returns a correlation ID and allowed next calls."
+        },
+        {
+          "info": {
+            "name": "Validate the started flow",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.prove.com/v3/validate",
+            "body": {
+              "type": "json",
+              "data": "{\"correlationId\":\"{{correlationId}}\"}"
+            }
+          },
+          "docs": "Validates the initiated flow and confirms phone possession."
+        },
+        {
+          "info": {
+            "name": "Challenge the customer",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.prove.com/v3/challenge",
+            "body": {
+              "type": "json",
+              "data": "{\"correlationId\":\"{{correlationId}}\",\"dob\":\"1981-01-17\",\"ssn\":\"5059\"}"
+            }
+          },
+          "docs": "Submits a DOB/SSN knowledge challenge when validate returns v3-challenge."
+        },
+        {
+          "info": {
+            "name": "Complete the Pre-Fill flow",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.prove.com/v3/complete",
+            "body": {
+              "type": "json",
+              "data": "{\"correlationId\":\"{{correlationId}}\",\"individual\":{\"firstName\":\"Milo\",\"lastName\":\"Pinson\"}}"
+            }
+          },
+          "docs": "Final call that reconciles the claimed identity and returns the IDV/KYC evaluation and prefilled attributes."
+        }
+      ]
+    },
+    {
+      "info": {
+        "name": "Trust Score (Unified Authentication)",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Start a Unified Authentication flow",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.prove.com/v3/unify",
+            "body": {
+              "type": "json",
+              "data": "{\"phoneNumber\":\"2001001695\",\"possessionType\":\"mobile\"}"
+            }
+          },
+          "docs": "Initiates a Unify flow that passively recognizes a returning customer by phone possession."
+        },
+        {
+          "info": {
+            "name": "Bind a Prove Key to a Unify session",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.prove.com/v3/unify-bind",
+            "body": {
+              "type": "json",
+              "data": "{\"correlationId\":\"{{correlationId}}\"}"
+            }
+          },
+          "docs": "Binds a Prove Key to the phone number of a Unify session and returns the possession result."
+        },
+        {
+          "info": {
+            "name": "Get Unify session status and trust result",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.prove.com/v3/unify-status",
+            "body": {
+              "type": "json",
+              "data": "{\"correlationId\":\"{{correlationId}}\"}"
+            }
+          },
+          "docs": "Checks the status of a Unify session and returns the possession and trust evaluation."
+        }
+      ]
+    },
+    {
+      "info": {
+        "name": "Pre-Fill (Identity Discovery)",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Discover available identity attributes",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.prove.com/v3/discover"
+          },
+          "docs": "Returns which verified identity attributes Prove can provide for the session's phone number."
+        },
+        {
+          "info": {
+            "name": "Fetch verified identity attribute values",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.prove.com/v3/fetch"
+          },
+          "docs": "Fetches the authoritative values for the attributes surfaced by discover."
+        }
+      ]
+    },
+    {
+      "info": {
+        "name": "Auth",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Start a phone authentication flow",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.prove.com/v3/server/auth/start",
+            "body": {
+              "type": "json",
+              "data": "{\"phoneNumber\":\"2001001695\"}"
+            }
+          },
+          "docs": "Begins a phone-based authentication flow for a known customer."
+        },
+        {
+          "info": {
+            "name": "Continue a phone authentication flow",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.prove.com/v3/server/auth/continue",
+            "body": {
+              "type": "json",
+              "data": "{\"authId\":\"{{authId}}\"}"
+            }
+          },
+          "docs": "Continues an in-progress authentication flow with intermediate possession data."
+        },
+        {
+          "info": {
+            "name": "Finish a phone authentication flow",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.prove.com/v3/server/auth/finish",
+            "body": {
+              "type": "json",
+              "data": "{\"authId\":\"{{authId}}\"}"
+            }
+          },
+          "docs": "Completes the auth flow and returns the final authentication result."
+        },
+        {
+          "info": {
+            "name": "Revoke a bound device",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.prove.com/v3/device/revoke",
+            "body": {
+              "type": "json",
+              "data": "{\"deviceId\":\"{{deviceId}}\"}"
+            }
+          },
+          "docs": "Revokes a previously bound device / Prove Key."
+        }
+      ]
+    },
+    {
+      "info": {
+        "name": "Identity",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Batch get identities",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.prove.com/v3/identity"
+          },
+          "docs": "Returns a paginated page of enrolled identities."
+        },
+        {
+          "info": {
+            "name": "Enroll an identity",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.prove.com/v3/identity",
+            "body": {
+              "type": "json",
+              "data": "{\"phoneNumber\":\"2001001695\",\"identityAttributes\":{}}"
+            }
+          },
+          "docs": "Enrolls a customer identity keyed to a phone number."
+        },
+        {
+          "info": {
+            "name": "Batch enroll identities",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.prove.com/v3/identity/batch",
+            "body": {
+              "type": "json",
+              "data": "{\"identities\":[]}"
+            }
+          },
+          "docs": "Enrolls up to 100 identities in a single request."
+        },
+        {
+          "info": {
+            "name": "Get identities by phone number",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.prove.com/v3/identity/2001001695/lookup"
+          },
+          "docs": "Returns enrolled identities associated with a mobile number."
+        },
+        {
+          "info": {
+            "name": "Get an identity",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.prove.com/v3/identity/{{proveId}}"
+          },
+          "docs": "Returns a single enrolled identity by its Prove identity ID."
+        },
+        {
+          "info": {
+            "name": "Disenroll an identity",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "https://api.prove.com/v3/identity/{{proveId}}"
+          },
+          "docs": "Removes an enrolled identity by its Prove identity ID."
+        },
+        {
+          "info": {
+            "name": "Cross-domain identity",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.prove.com/v3/identity/{{identityId}}/cross-domain",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Shares or resolves an enrolled identity across linked domains."
+        }
+      ]
+    },
+    {
+      "info": {
+        "name": "Domain",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Link a domain",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.prove.com/v3/domain/link",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Initiates linking the current domain to another domain."
+        },
+        {
+          "info": {
+            "name": "Confirm a domain link",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.prove.com/v3/domain/confirm-link",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Confirms a pending domain link request."
+        },
+        {
+          "info": {
+            "name": "Unlink a domain",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.prove.com/v3/domain/unlink",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Removes a link between two domains."
+        },
+        {
+          "info": {
+            "name": "Get domain details",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.prove.com/v3/domain/id"
+          },
+          "docs": "Returns details about the current domain."
+        },
+        {
+          "info": {
+            "name": "List linked domains",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.prove.com/v3/domain/linked"
+          },
+          "docs": "Returns the list of domains linked to the current domain."
+        }
+      ]
+    }
+  ]
+}

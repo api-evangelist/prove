@@ -1,0 +1,92 @@
+aid: prove
+name: Prove
+review:
+  question: Does Prove expose a documented public WebSocket or streaming API?
+  answer: false
+  date: '2026-06-21'
+  reviewer: API Evangelist
+  asyncapiSpecCreated: false
+  asyncapiScopeNote: |
+    No AsyncAPI document was created. The Prove API (v3) is a request/response
+    REST API over HTTPS. No WebSocket (ws:// or wss://) surface and no HTTP
+    Server-Sent Events (SSE) streaming endpoint are documented for any Prove
+    product. The verification flow is stateful and ordered but is driven by
+    discrete synchronous REST calls bound to a correlation ID, not a streaming
+    transport, so there is nothing in scope for AsyncAPI modeling.
+findings:
+  summary: |
+    Prove does not publish a documented public WebSocket or streaming API. The
+    Prove API is OAuth 2.0 (client-credentials) secured REST over HTTPS, with a
+    production base URL of https://api.prove.com/v3 (also reachable at
+    https://platform.proveapis.com/v3, with UAT at
+    https://platform.uat.proveapis.com/v3). The Pre-Fill verification flow is a
+    sequence of ordered synchronous POST calls - start, validate, challenge,
+    complete - correlated by a correlation ID. Unified Authentication (Unify /
+    Trust Score), Auth, and the Identity Manager are likewise plain REST. No
+    realtime, bidirectional, or push transport is documented.
+  transports:
+    - protocol: REST
+      scheme: https
+      baseURL: https://api.prove.com/v3
+      documented: true
+    - protocol: WebSocket
+      scheme: wss
+      documented: false
+      note: No WebSocket endpoint is documented in Prove's developer portal or server SDKs as of the review date.
+    - protocol: SSE
+      scheme: https
+      documented: false
+      note: No Server-Sent Events streaming endpoint is documented; the verification flow uses discrete synchronous REST calls.
+  endpointsConfirmedRest:
+    - POST   https://api.prove.com/v3/token
+    - POST   https://api.prove.com/v3/start
+    - POST   https://api.prove.com/v3/validate
+    - POST   https://api.prove.com/v3/challenge
+    - POST   https://api.prove.com/v3/complete
+    - POST   https://api.prove.com/v3/unify
+    - POST   https://api.prove.com/v3/unify-bind
+    - POST   https://api.prove.com/v3/unify-status
+    - GET    https://api.prove.com/v3/discover
+    - GET    https://api.prove.com/v3/fetch
+    - POST   https://api.prove.com/v3/server/auth/start
+    - POST   https://api.prove.com/v3/server/auth/continue
+    - POST   https://api.prove.com/v3/server/auth/finish
+    - POST   https://api.prove.com/v3/device/revoke
+    - GET    https://api.prove.com/v3/identity
+    - POST   https://api.prove.com/v3/identity
+    - POST   https://api.prove.com/v3/identity/batch
+    - GET    https://api.prove.com/v3/identity/{mobileNumber}/lookup
+    - GET    https://api.prove.com/v3/identity/{proveId}
+    - DELETE https://api.prove.com/v3/identity/{proveId}
+    - POST   https://api.prove.com/v3/identity/{identityId}/cross-domain
+    - POST   https://api.prove.com/v3/domain/link
+    - POST   https://api.prove.com/v3/domain/confirm-link
+    - POST   https://api.prove.com/v3/domain/unlink
+    - GET    https://api.prove.com/v3/domain/id
+    - GET    https://api.prove.com/v3/domain/linked
+sources:
+  - url: https://developer.prove.com
+    type: Documentation
+    note: Developer portal; all documented surfaces are HTTPS REST.
+  - url: https://developer.prove.com/docs/prove-pre-fill-flow
+    type: Documentation
+    note: Pre-Fill flow defined as ordered synchronous calls start/validate/challenge/complete.
+  - url: https://developer.prove.com/reference/unify-server
+    type: APIReference
+    note: Unify / Unified Authentication server flow; REST.
+  - url: https://github.com/prove-identity/prove-sdk-server-go
+    type: SDK
+    note: Official Go server SDK enumerates the v3 REST operations and paths; no streaming transport.
+  - url: https://github.com/prove-identity/prove-postman
+    type: PostmanCollection
+    note: Official Postman collection confirms base URL and /token + v3 flow endpoints.
+actions:
+  asyncapiPath: null
+  apisYmlUpdated: true
+  reason: |
+    No WebSocket or SSE protocol surface exists, so no AsyncAPI document was
+    authored. The apis.yml catalog and OpenAPI 3.0.1 document fully describe the
+    documented REST surface across the five Prove sub-APIs.
+maintainers:
+- FN: Kin Lane
+  email: kin@apievangelist.com

@@ -1,0 +1,111 @@
+specification: API Commons Plans
+specificationVersion: '0.1'
+schema: https://raw.githubusercontent.com/api-evangelist/interface-research/main/schema/api-commons.yml#/$defs/Plans
+provider: Prove
+providerId: prove
+created: '2026-06-21'
+modified: '2026-06-21'
+reconciled: false
+tags:
+- Identity Verification
+- Authentication
+- Phone Intelligence
+- KYC
+- Fraud Prevention
+- Plans
+description: >-
+  Prove sells its identity verification and authentication products through a
+  sales-led, contract-based model. Pricing is not published; it is typically
+  negotiated per use case (Pre-Fill, Trust Score / Unified Authentication, Auth,
+  Identity Manager) and metered per verification, per authentication, or per
+  successful identity transaction. A self-service sandbox with free test
+  credentials (the "Milo Pinson" test user) is available via the Prove Portal
+  for development against the UAT environment, but production access and rates
+  require an agreement with Prove. Specific per-call prices are not reconciled in
+  this artifact.
+notes: >-
+  No public price list exists. Verify metering units (per-transaction,
+  per-successful-verification, per-authentication, monthly platform fee) and
+  rates directly with Prove sales during reconciliation.
+sources:
+- https://www.prove.com
+- https://developer.prove.com
+- https://portal.prove.com/en/signup
+plans:
+- id: prove-sandbox
+  name: Sandbox / Developer
+  type: free
+  description: >-
+    Free self-service sandbox credentials against the UAT environment
+    (https://platform.uat.proveapis.com) for building and testing the v3
+    flows with Prove-provided test users. No production traffic.
+  entries:
+  - label: Sandbox Access
+    name: sandbox
+    type: free
+    metric: requests
+    limit: -1
+    timeFrame: month
+    geo: global
+    unit: 1
+    price: free (test environment)
+    userMultiplied: false
+  elements:
+  - name: Pre-Fill Flow (start/validate/challenge/complete)
+  - name: Unify / Trust Score
+  - name: Identity Manager
+- id: prove-production
+  name: Production (Contract)
+  type: enterprise
+  description: >-
+    Production access to Prove identity verification and authentication
+    products under a negotiated agreement. Metering and pricing are
+    sales-led and depend on product mix and volume. Contact Prove sales.
+  entries:
+  - label: Pre-Fill Verification
+    name: prefill
+    type: usage
+    metric: verifications
+    limit: -1
+    timeFrame: month
+    geo: global
+    unit: 1
+    price: contact sales
+    userMultiplied: false
+  - label: Trust Score / Unified Authentication
+    name: trust_score
+    type: usage
+    metric: authentications
+    limit: -1
+    timeFrame: month
+    geo: global
+    unit: 1
+    price: contact sales
+    userMultiplied: false
+  - label: Prove Auth
+    name: auth
+    type: usage
+    metric: authentications
+    limit: -1
+    timeFrame: month
+    geo: global
+    unit: 1
+    price: contact sales
+    userMultiplied: false
+  - label: Identity Manager
+    name: identity
+    type: usage
+    metric: identities
+    limit: -1
+    timeFrame: month
+    geo: global
+    unit: 1
+    price: contact sales
+    userMultiplied: false
+  elements:
+  - name: Custom Volume Pricing
+  - name: SLA and Support
+  - name: Production Credentials
+maintainers:
+- FN: Kin Lane
+  email: kin@apievangelist.com

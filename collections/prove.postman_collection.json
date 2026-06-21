@@ -1,0 +1,1094 @@
+{
+  "item": [
+    {
+      "id": "5ecb0a48-c090-4f7e-b7b7-ab3c09f0bde5",
+      "name": "Authentication",
+      "item": [
+        {
+          "id": "d68f614f-2df8-46f2-9d0d-a749537a5865",
+          "name": "Issue an OAuth 2.0 access token",
+          "request": {
+            "name": "Issue an OAuth 2.0 access token",
+            "description": {},
+            "url": {
+              "path": [
+                "token"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/x-www-form-urlencoded"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "auth": null,
+            "body": {
+              "mode": "urlencoded",
+              "urlencoded": [
+                {
+                  "key": "grant_type",
+                  "value": "client_credentials"
+                },
+                {
+                  "key": "client_id",
+                  "value": "{{CLIENT_ID}}"
+                },
+                {
+                  "key": "client_secret",
+                  "value": "{{CLIENT_SECRET}}"
+                }
+              ]
+            }
+          },
+          "response": [],
+          "event": [],
+          "protocolProfileBehavior": {}
+        }
+      ],
+      "event": []
+    },
+    {
+      "id": "5f1daac8-4428-482a-848d-78b5fc6b10bc",
+      "name": "Identity Verification (v3 Flows)",
+      "item": [
+        {
+          "id": "bc25b647-f0eb-442d-9d47-02453bfe15fa",
+          "name": "Start a Pre-Fill verification flow",
+          "request": {
+            "name": "Start a Pre-Fill verification flow",
+            "description": {},
+            "url": {
+              "path": [
+                "start"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "auth": null,
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"flowType\": \"mobile\",\n  \"phoneNumber\": \"2001001695\",\n  \"finalTargetUrl\": \"https://prove.com\",\n  \"smsMessage\": \"Customizable sms message. Code: ####\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [],
+          "event": [],
+          "protocolProfileBehavior": {}
+        },
+        {
+          "id": "ab1f5e6d-98bd-4e4b-9fca-21aede489274",
+          "name": "Validate the started flow",
+          "request": {
+            "name": "Validate the started flow",
+            "description": {},
+            "url": {
+              "path": [
+                "validate"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "auth": null,
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"correlationId\": \"{{correlationId}}\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [],
+          "event": [],
+          "protocolProfileBehavior": {}
+        },
+        {
+          "id": "f5e393f3-ae49-4af6-bf35-15d5d45305ef",
+          "name": "Challenge the customer",
+          "request": {
+            "name": "Challenge the customer",
+            "description": {},
+            "url": {
+              "path": [
+                "challenge"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "auth": null,
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"correlationId\": \"{{correlationId}}\",\n  \"dob\": \"1981-01-17\",\n  \"ssn\": \"5059\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [],
+          "event": [],
+          "protocolProfileBehavior": {}
+        },
+        {
+          "id": "16bd795b-21b1-42c8-bbae-27bf99383795",
+          "name": "Complete the Pre-Fill flow",
+          "request": {
+            "name": "Complete the Pre-Fill flow",
+            "description": {},
+            "url": {
+              "path": [
+                "complete"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "auth": null,
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"correlationId\": \"{{correlationId}}\",\n  \"individual\": {\n    \"firstName\": \"Milo\",\n    \"lastName\": \"Pinson\"\n  }\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [],
+          "event": [],
+          "protocolProfileBehavior": {}
+        }
+      ],
+      "event": []
+    },
+    {
+      "id": "62a63ca6-6eab-44c2-8afc-9a4c68079c21",
+      "name": "Trust Score (Unified Authentication)",
+      "item": [
+        {
+          "id": "c5282c60-cd90-4491-bd4c-73ee1c102a4d",
+          "name": "Start a Unified Authentication flow",
+          "request": {
+            "name": "Start a Unified Authentication flow",
+            "description": {},
+            "url": {
+              "path": [
+                "unify"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "auth": null,
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"phoneNumber\": \"2001001695\",\n  \"possessionType\": \"mobile\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [],
+          "event": [],
+          "protocolProfileBehavior": {}
+        },
+        {
+          "id": "21da153a-c3d8-4c9d-8355-5e216c15736f",
+          "name": "Bind a Prove Key to a Unify session",
+          "request": {
+            "name": "Bind a Prove Key to a Unify session",
+            "description": {},
+            "url": {
+              "path": [
+                "unify-bind"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "auth": null,
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"correlationId\": \"{{correlationId}}\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [],
+          "event": [],
+          "protocolProfileBehavior": {}
+        },
+        {
+          "id": "9f099418-9126-412d-b6c2-79681ce803e8",
+          "name": "Get Unify session status and trust result",
+          "request": {
+            "name": "Get Unify session status and trust result",
+            "description": {},
+            "url": {
+              "path": [
+                "unify-status"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "auth": null,
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"correlationId\": \"{{correlationId}}\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [],
+          "event": [],
+          "protocolProfileBehavior": {}
+        }
+      ],
+      "event": []
+    },
+    {
+      "id": "17f7c2f9-012f-4b4a-b18a-36bfe1ef722a",
+      "name": "Pre-Fill (Identity Discovery)",
+      "item": [
+        {
+          "id": "9cdf96d2-238c-413d-a22c-fb728067f112",
+          "name": "Discover available identity attributes",
+          "request": {
+            "name": "Discover available identity attributes",
+            "description": {},
+            "url": {
+              "path": [
+                "discover"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [],
+          "event": [],
+          "protocolProfileBehavior": {}
+        },
+        {
+          "id": "bc8dead5-4f6c-4b2f-9a29-952c82f06039",
+          "name": "Fetch verified identity attribute values",
+          "request": {
+            "name": "Fetch verified identity attribute values",
+            "description": {},
+            "url": {
+              "path": [
+                "fetch"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [],
+          "event": [],
+          "protocolProfileBehavior": {}
+        }
+      ],
+      "event": []
+    },
+    {
+      "id": "cd5e2755-769c-4775-bc64-4b30fe48b3d7",
+      "name": "Auth",
+      "item": [
+        {
+          "id": "ce1b7db1-45c3-4c50-89b1-2a8aea6738e1",
+          "name": "Start a phone authentication flow",
+          "request": {
+            "name": "Start a phone authentication flow",
+            "description": {},
+            "url": {
+              "path": [
+                "server",
+                "auth",
+                "start"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "auth": null,
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"phoneNumber\": \"2001001695\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [],
+          "event": [],
+          "protocolProfileBehavior": {}
+        },
+        {
+          "id": "35c837c6-80f7-4d09-bc30-cc906dc7a805",
+          "name": "Continue a phone authentication flow",
+          "request": {
+            "name": "Continue a phone authentication flow",
+            "description": {},
+            "url": {
+              "path": [
+                "server",
+                "auth",
+                "continue"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "auth": null,
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"authId\": \"{{authId}}\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [],
+          "event": [],
+          "protocolProfileBehavior": {}
+        },
+        {
+          "id": "23fe15c5-1ed3-4eed-bbe0-85ea99a3123b",
+          "name": "Finish a phone authentication flow",
+          "request": {
+            "name": "Finish a phone authentication flow",
+            "description": {},
+            "url": {
+              "path": [
+                "server",
+                "auth",
+                "finish"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "auth": null,
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"authId\": \"{{authId}}\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [],
+          "event": [],
+          "protocolProfileBehavior": {}
+        },
+        {
+          "id": "266bcdd5-39a6-47a9-b88c-b2bda62461de",
+          "name": "Revoke a bound device",
+          "request": {
+            "name": "Revoke a bound device",
+            "description": {},
+            "url": {
+              "path": [
+                "device",
+                "revoke"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "auth": null,
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"deviceId\": \"{{deviceId}}\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [],
+          "event": [],
+          "protocolProfileBehavior": {}
+        }
+      ],
+      "event": []
+    },
+    {
+      "id": "a0048289-a0ce-446a-a9e2-69b9be4755fd",
+      "name": "Identity",
+      "item": [
+        {
+          "id": "7fe8ed03-f105-4136-8bbd-9db29c605e1e",
+          "name": "Batch get identities",
+          "request": {
+            "name": "Batch get identities",
+            "description": {},
+            "url": {
+              "path": [
+                "identity"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [],
+          "event": [],
+          "protocolProfileBehavior": {}
+        },
+        {
+          "id": "7db02079-d417-4a00-8df1-f7caa81bdec6",
+          "name": "Enroll an identity",
+          "request": {
+            "name": "Enroll an identity",
+            "description": {},
+            "url": {
+              "path": [
+                "identity"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "auth": null,
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"phoneNumber\": \"2001001695\",\n  \"identityAttributes\": {}\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [],
+          "event": [],
+          "protocolProfileBehavior": {}
+        },
+        {
+          "id": "610ea7cf-a341-43dd-b78f-33585f33c4d7",
+          "name": "Batch enroll identities",
+          "request": {
+            "name": "Batch enroll identities",
+            "description": {},
+            "url": {
+              "path": [
+                "identity",
+                "batch"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "auth": null,
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"identities\": []\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [],
+          "event": [],
+          "protocolProfileBehavior": {}
+        },
+        {
+          "id": "46d981ac-d44b-46c5-9a75-ddf531ec77bb",
+          "name": "Get identities by phone number",
+          "request": {
+            "name": "Get identities by phone number",
+            "description": {},
+            "url": {
+              "path": [
+                "identity",
+                "2001001695",
+                "lookup"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [],
+          "event": [],
+          "protocolProfileBehavior": {}
+        },
+        {
+          "id": "a067c3c4-c673-4968-8489-2e2de32669cb",
+          "name": "Get an identity",
+          "request": {
+            "name": "Get an identity",
+            "description": {},
+            "url": {
+              "path": [
+                "identity",
+                "{{proveId}}"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [],
+          "event": [],
+          "protocolProfileBehavior": {}
+        },
+        {
+          "id": "d4b45fb9-7ab6-4984-9b78-17944cd1d98b",
+          "name": "Disenroll an identity",
+          "request": {
+            "name": "Disenroll an identity",
+            "description": {},
+            "url": {
+              "path": [
+                "identity",
+                "{{proveId}}"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "DELETE",
+            "auth": null
+          },
+          "response": [],
+          "event": [],
+          "protocolProfileBehavior": {}
+        },
+        {
+          "id": "911aa643-8291-4ee7-bed1-a54f7f6327bc",
+          "name": "Cross-domain identity",
+          "request": {
+            "name": "Cross-domain identity",
+            "description": {},
+            "url": {
+              "path": [
+                "identity",
+                "{{identityId}}",
+                "cross-domain"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "auth": null,
+            "body": {
+              "mode": "raw",
+              "raw": "{}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [],
+          "event": [],
+          "protocolProfileBehavior": {}
+        }
+      ],
+      "event": []
+    },
+    {
+      "id": "4c3ea310-8a7d-46d0-9da7-f756b9ee5c22",
+      "name": "Domain",
+      "item": [
+        {
+          "id": "3014a015-690e-46bf-bba6-6e757436923b",
+          "name": "Link a domain",
+          "request": {
+            "name": "Link a domain",
+            "description": {},
+            "url": {
+              "path": [
+                "domain",
+                "link"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "auth": null,
+            "body": {
+              "mode": "raw",
+              "raw": "{}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [],
+          "event": [],
+          "protocolProfileBehavior": {}
+        },
+        {
+          "id": "970e15b4-489a-4e28-8583-6abc36f2a30c",
+          "name": "Confirm a domain link",
+          "request": {
+            "name": "Confirm a domain link",
+            "description": {},
+            "url": {
+              "path": [
+                "domain",
+                "confirm-link"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "auth": null,
+            "body": {
+              "mode": "raw",
+              "raw": "{}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [],
+          "event": [],
+          "protocolProfileBehavior": {}
+        },
+        {
+          "id": "6ebe1938-8e4c-4fb6-8f0d-732eb8c6838d",
+          "name": "Unlink a domain",
+          "request": {
+            "name": "Unlink a domain",
+            "description": {},
+            "url": {
+              "path": [
+                "domain",
+                "unlink"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "auth": null,
+            "body": {
+              "mode": "raw",
+              "raw": "{}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [],
+          "event": [],
+          "protocolProfileBehavior": {}
+        },
+        {
+          "id": "d80fca62-d841-412d-9212-ee0281e9bf8f",
+          "name": "Get domain details",
+          "request": {
+            "name": "Get domain details",
+            "description": {},
+            "url": {
+              "path": [
+                "domain",
+                "id"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [],
+          "event": [],
+          "protocolProfileBehavior": {}
+        },
+        {
+          "id": "dacfa4aa-ed6a-4911-865c-9a1cf6ef3da5",
+          "name": "List linked domains",
+          "request": {
+            "name": "List linked domains",
+            "description": {},
+            "url": {
+              "path": [
+                "domain",
+                "linked"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [],
+          "event": [],
+          "protocolProfileBehavior": {}
+        }
+      ],
+      "event": []
+    }
+  ],
+  "event": [],
+  "variable": [
+    {
+      "type": "string",
+      "value": "https://api.prove.com/v3",
+      "key": "baseUrl"
+    }
+  ],
+  "auth": {
+    "type": "bearer",
+    "bearer": [
+      {
+        "key": "token",
+        "value": "{{bearerToken}}"
+      }
+    ]
+  },
+  "info": {
+    "_postman_id": "c728b42a-7892-459b-accc-3336578b8f39",
+    "name": "Prove API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "description": {
+      "content": "Phone-centric identity verification and authentication API (v3). OAuth 2.0 client-credentials secured REST.\n\nContact Support:\n Name: Prove Developer Support\n URL: https://developer.prove.com",
+      "type": "text/plain"
+    }
+  }
+}

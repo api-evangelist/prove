@@ -1,0 +1,1018 @@
+openapi: 3.0.1
+info:
+  title: Prove API
+  description: >-
+    Phone-centric identity verification and authentication API. The Prove API
+    (v3) uses a consumer's mobile phone number and cryptographic possession
+    signals to power the Pre-Fill verification flow (start, validate, challenge,
+    complete), Unified Authentication / Trust Score (unify, unify-bind,
+    unify-status), identity discovery (discover, fetch), phone-based Auth, and a
+    persistent Identity Manager. All endpoints are OAuth 2.0 (client-credentials)
+    secured; obtain a Bearer access token from the /token endpoint and send it as
+    `Authorization: Bearer <token>` on every subsequent request.
+  termsOfService: https://www.prove.com/legal/terms
+  contact:
+    name: Prove Developer Support
+    url: https://developer.prove.com
+  version: '3.0'
+servers:
+  - url: https://api.prove.com/v3
+    description: Production
+  - url: https://platform.proveapis.com/v3
+    description: Production (platform host)
+  - url: https://platform.uat.proveapis.com/v3
+    description: UAT / Sandbox
+security:
+  - bearerAuth: []
+tags:
+  - name: Authentication
+    description: OAuth 2.0 token issuance.
+  - name: Identity Verification
+    description: Ordered Pre-Fill verification flow - start, validate, challenge, complete.
+  - name: Trust Score
+    description: Unified Authentication possession and trust evaluation.
+  - name: Pre-Fill
+    description: Identity discovery and verified attribute retrieval.
+  - name: Auth
+    description: Phone-based authentication and device binding.
+  - name: Identity
+    description: Persistent identity lifecycle management.
+  - name: Domain
+    description: Cross-domain linking of identity scopes.
+paths:
+  /token:
+    post:
+      operationId: v3TokenRequest
+      tags:
+        - Authentication
+      summary: Issue an OAuth 2.0 access token
+      description: >-
+        Exchange a client ID and client secret for a short-lived Bearer access
+        token using the OAuth 2.0 client-credentials grant. The returned
+        access_token must be sent as `Authorization: Bearer <token>` on all
+        other Prove API calls.
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/TokenRequest'
+      responses:
+        '200':
+          description: A new access token.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TokenResponse'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+      security: []
+  /start:
+    post:
+      operationId: v3StartRequest
+      tags:
+        - Identity Verification
+      summary: Start a Pre-Fill verification flow
+      description: >-
+        Initiates the identity verification session against a mobile phone
+        number, indicates whether the session is desktop or mobile, and returns a
+        correlation ID plus an auth token and the set of allowed next calls.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/V3StartRequest'
+      responses:
+        '200':
+          description: Flow started.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/V3StartResponse'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+  /validate:
+    post:
+      operationId: v3ValidateRequest
+      tags:
+        - Identity Verification
+      summary: Validate the started flow
+      description: >-
+        Validates the initiated flow against the correlation ID returned by
+        /start and confirms phone possession. The response Next field indicates
+        whether a challenge is required before completing.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/V3ValidateRequest'
+      responses:
+        '200':
+          description: Flow validated.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/V3FlowResponse'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+  /challenge:
+    post:
+      operationId: v3ChallengeRequest
+      tags:
+        - Identity Verification
+      summary: Challenge the customer
+      description: >-
+        When /validate returns `v3-challenge` in its Next field, submit a
+        knowledge challenge (date of birth and/or last four of SSN) to raise
+        assurance before completing the flow.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/V3ChallengeRequest'
+      responses:
+        '200':
+          description: Challenge evaluated.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/V3FlowResponse'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+  /complete:
+    post:
+      operationId: v3CompleteRequest
+      tags:
+        - Identity Verification
+      summary: Complete the Pre-Fill flow
+      description: >-
+        Final call in the flow. Submits the customer's claimed identity for
+        real-time reconciliation against the phone number and returns the IDV /
+        KYC evaluation and prefilled identity attributes.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/V3CompleteRequest'
+      responses:
+        '200':
+          description: Flow completed.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/V3CompleteResponse'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+  /unify:
+    post:
+      operationId: v3UnifyRequest
+      tags:
+        - Trust Score
+      summary: Start a Unified Authentication flow
+      description: >-
+        Initiates a Unify (Unified Authentication) flow that passively recognizes
+        a returning customer by phone possession and an optional bound Prove Key,
+        returning a correlation ID and the set of allowed next calls.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/V3UnifyRequest'
+      responses:
+        '200':
+          description: Unify flow started.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/V3FlowResponse'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+  /unify-bind:
+    post:
+      operationId: v3UnifyBindRequest
+      tags:
+        - Trust Score
+      summary: Bind a Prove Key to a Unify session
+      description: >-
+        Binds a Prove Key to the phone number of a Unify session and returns the
+        possession result so the customer can be passively recognized on future
+        visits.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/V3CorrelationRequest'
+      responses:
+        '200':
+          description: Prove Key bound.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/V3FlowResponse'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+  /unify-status:
+    post:
+      operationId: v3UnifyStatusRequest
+      tags:
+        - Trust Score
+      summary: Get Unify session status and trust result
+      description: >-
+        Checks the status of a Unify session and returns the possession and trust
+        evaluation used to make a risk-aware authentication decision.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/V3CorrelationRequest'
+      responses:
+        '200':
+          description: Unify status.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/V3UnifyStatusResponse'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+  /discover:
+    get:
+      operationId: v3DiscoverRequest
+      tags:
+        - Pre-Fill
+      summary: Discover available identity attributes
+      description: >-
+        Returns which verified identity attributes Prove can provide for the
+        session's phone number; the discovered attribute keys are then passed to
+        /fetch to retrieve their values.
+      responses:
+        '200':
+          description: Discoverable attributes.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DiscoverResponse'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+  /fetch:
+    get:
+      operationId: v3FetchRequest
+      tags:
+        - Pre-Fill
+      summary: Fetch verified identity attribute values
+      description: >-
+        Fetches the authoritative values for the identity attributes surfaced by
+        /discover so onboarding forms can be prefilled with verified data.
+      responses:
+        '200':
+          description: Attribute values.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/FetchResponse'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+  /server/auth/start:
+    post:
+      operationId: authStartRequest
+      tags:
+        - Auth
+      summary: Start a phone authentication flow
+      description: >-
+        Begins a phone-based authentication flow for a known customer, returning
+        an auth identifier used to drive the client possession challenge.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AuthStartRequest'
+      responses:
+        '200':
+          description: Auth flow started.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AuthResponse'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+  /server/auth/continue:
+    post:
+      operationId: authContinueRequest
+      tags:
+        - Auth
+      summary: Continue a phone authentication flow
+      description: Continues an in-progress authentication flow with intermediate possession data.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AuthContinueRequest'
+      responses:
+        '200':
+          description: Auth flow continued.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AuthResponse'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+  /server/auth/finish:
+    post:
+      operationId: authFinishRequest
+      tags:
+        - Auth
+      summary: Finish a phone authentication flow
+      description: >-
+        Completes the auth flow and returns the final authentication result for
+        the customer's phone possession.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AuthContinueRequest'
+      responses:
+        '200':
+          description: Auth result.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AuthResponse'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+  /device/revoke:
+    post:
+      operationId: v3DeviceRevokeRequest
+      tags:
+        - Auth
+      summary: Revoke a bound device
+      description: Revokes a previously bound device / Prove Key so it can no longer be used for passive authentication.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/DeviceRevokeRequest'
+      responses:
+        '200':
+          description: Device revoked.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SuccessResponse'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+  /identity:
+    get:
+      operationId: v3BatchGetIdentities
+      tags:
+        - Identity
+      summary: Batch get identities
+      description: >-
+        Returns a paginated page of enrolled identities. Pass the lastKey from a
+        previous response as startKey to page forward.
+      parameters:
+        - name: startKey
+          in: query
+          required: false
+          description: Pagination token returned as lastKey from a previous call.
+          schema:
+            type: string
+      responses:
+        '200':
+          description: A page of identities.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/IdentityListResponse'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+    post:
+      operationId: v3EnrollIdentity
+      tags:
+        - Identity
+      summary: Enroll an identity
+      description: Enrolls a customer identity keyed to a phone number for persistent recognition across sessions.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/EnrollIdentityRequest'
+      responses:
+        '200':
+          description: Identity enrolled.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Identity'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+  /identity/batch:
+    post:
+      operationId: v3BatchEnrollIdentities
+      tags:
+        - Identity
+      summary: Batch enroll identities
+      description: Enrolls multiple customers (up to 100) in a single request for efficient bulk operations.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                identities:
+                  type: array
+                  maxItems: 100
+                  items:
+                    $ref: '#/components/schemas/EnrollIdentityRequest'
+      responses:
+        '200':
+          description: Identities enrolled.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/IdentityListResponse'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+  /identity/{mobileNumber}/lookup:
+    get:
+      operationId: v3GetIdentitiesByPhoneNumber
+      tags:
+        - Identity
+      summary: Get identities by phone number
+      description: Returns enrolled identities associated with a given mobile number.
+      parameters:
+        - name: mobileNumber
+          in: path
+          required: true
+          description: E.164 or local mobile number to look up.
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Matching identities.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/IdentityListResponse'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+  /identity/{proveId}:
+    get:
+      operationId: v3GetIdentity
+      tags:
+        - Identity
+      summary: Get an identity
+      description: Returns a single enrolled identity by its Prove identity ID.
+      parameters:
+        - name: proveId
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: The identity.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Identity'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+    delete:
+      operationId: v3DisenrollIdentity
+      tags:
+        - Identity
+      summary: Disenroll an identity
+      description: Removes an enrolled identity by its Prove identity ID.
+      parameters:
+        - name: proveId
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Identity disenrolled.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SuccessResponse'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+  /identity/{identityId}/cross-domain:
+    post:
+      operationId: v3CrossDomainIdentity
+      tags:
+        - Identity
+      summary: Cross-domain identity
+      description: Shares or resolves an enrolled identity across linked domains.
+      parameters:
+        - name: identityId
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Cross-domain result.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Identity'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+  /domain/link:
+    post:
+      operationId: v3DomainLinkRequest
+      tags:
+        - Domain
+      summary: Link a domain
+      description: Initiates linking the current domain to another domain so identities can be shared.
+      responses:
+        '200':
+          description: Link initiated.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SuccessResponse'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+  /domain/confirm-link:
+    post:
+      operationId: v3DomainConfirmLinkRequest
+      tags:
+        - Domain
+      summary: Confirm a domain link
+      description: Confirms a pending domain link request.
+      responses:
+        '200':
+          description: Link confirmed.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SuccessResponse'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+  /domain/unlink:
+    post:
+      operationId: v3DomainUnlinkRequest
+      tags:
+        - Domain
+      summary: Unlink a domain
+      description: Removes a link between two domains.
+      responses:
+        '200':
+          description: Link removed.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SuccessResponse'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+  /domain/id:
+    get:
+      operationId: v3DomainIDRequest
+      tags:
+        - Domain
+      summary: Get domain details
+      description: Returns details about the current domain.
+      responses:
+        '200':
+          description: Domain details.
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: true
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+  /domain/linked:
+    get:
+      operationId: v3DomainLinkedRequest
+      tags:
+        - Domain
+      summary: List linked domains
+      description: Returns the list of domains linked to the current domain.
+      responses:
+        '200':
+          description: Linked domains.
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: true
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+      description: OAuth 2.0 client-credentials Bearer access token obtained from POST /token.
+    oauth2:
+      type: oauth2
+      flows:
+        clientCredentials:
+          tokenUrl: https://api.prove.com/v3/token
+          scopes: {}
+  responses:
+    BadRequest:
+      description: The request was malformed or failed validation.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    Unauthorized:
+      description: Missing, invalid, or expired access token.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    NotFound:
+      description: The requested resource was not found.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+  schemas:
+    TokenRequest:
+      type: object
+      required:
+        - grant_type
+        - client_id
+        - client_secret
+      properties:
+        grant_type:
+          type: string
+          enum:
+            - client_credentials
+          description: OAuth 2.0 grant type.
+        client_id:
+          type: string
+          description: Prove-issued client ID.
+        client_secret:
+          type: string
+          description: Prove-issued client secret.
+    TokenResponse:
+      type: object
+      properties:
+        access_token:
+          type: string
+        token_type:
+          type: string
+          example: Bearer
+        expires_in:
+          type: integer
+          description: Access token lifetime in seconds.
+        refresh_token:
+          type: string
+        refresh_expires_in:
+          type: integer
+    V3StartRequest:
+      type: object
+      required:
+        - flowType
+        - phoneNumber
+      properties:
+        flowType:
+          type: string
+          enum:
+            - desktop
+            - mobile
+          description: Whether the session originates on desktop or mobile.
+        phoneNumber:
+          type: string
+          description: Customer mobile phone number.
+        finalTargetURL:
+          type: string
+          format: uri
+          description: URL to redirect to at the end of a desktop (Instant Link) flow.
+        emailAddress:
+          type: string
+        smsMessage:
+          type: string
+          description: Customizable SMS body; use #### as the OTP placeholder.
+        ipAddress:
+          type: string
+        dob:
+          type: string
+          description: Date of birth (YYYY-MM-DD) used to seed reconciliation.
+        ssn:
+          type: string
+          description: Full or last-four SSN.
+        allowOTPRetry:
+          type: boolean
+    V3StartResponse:
+      type: object
+      properties:
+        success:
+          type: boolean
+        correlationId:
+          type: string
+          description: Session correlation ID passed to all subsequent flow calls.
+        authToken:
+          type: string
+        next:
+          $ref: '#/components/schemas/Next'
+    V3ValidateRequest:
+      type: object
+      required:
+        - correlationId
+      properties:
+        correlationId:
+          type: string
+    V3CorrelationRequest:
+      type: object
+      required:
+        - correlationId
+      properties:
+        correlationId:
+          type: string
+          pattern: '^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$'
+    V3ChallengeRequest:
+      type: object
+      required:
+        - correlationId
+      properties:
+        correlationId:
+          type: string
+        dob:
+          type: string
+          description: Date of birth (YYYY-MM-DD).
+        ssn:
+          type: string
+          description: Last four of SSN.
+    V3CompleteRequest:
+      type: object
+      required:
+        - correlationId
+        - individual
+      properties:
+        correlationId:
+          type: string
+        individual:
+          $ref: '#/components/schemas/Individual'
+    V3CompleteResponse:
+      type: object
+      properties:
+        success:
+          type: boolean
+        evaluation:
+          type: string
+          description: Overall flow evaluation result.
+        idv:
+          type: object
+          additionalProperties: true
+          description: Identity verification result and reconciled attributes.
+        kyc:
+          type: object
+          additionalProperties: true
+          description: KYC screening result.
+        next:
+          $ref: '#/components/schemas/Next'
+    V3FlowResponse:
+      type: object
+      properties:
+        success:
+          type: boolean
+        correlationId:
+          type: string
+        next:
+          $ref: '#/components/schemas/Next'
+    V3UnifyRequest:
+      type: object
+      required:
+        - phoneNumber
+      properties:
+        phoneNumber:
+          type: string
+        finalTargetURL:
+          type: string
+          format: uri
+        emailAddress:
+          type: string
+        ipAddress:
+          type: string
+        smsMessage:
+          type: string
+        possessionType:
+          type: string
+          enum:
+            - desktop
+            - mobile
+            - none
+        clientCustomerId:
+          type: string
+        clientHumanId:
+          type: string
+        clientRequestId:
+          type: string
+        deviceId:
+          type: string
+        proveId:
+          type: string
+        rebind:
+          type: boolean
+        checkReputation:
+          type: boolean
+        allowOTPRetry:
+          type: boolean
+    V3UnifyStatusResponse:
+      type: object
+      properties:
+        success:
+          type: boolean
+        correlationId:
+          type: string
+        evaluation:
+          type: string
+        possessionResult:
+          type: string
+        next:
+          $ref: '#/components/schemas/Next'
+    DiscoverResponse:
+      type: object
+      properties:
+        success:
+          type: boolean
+        attributes:
+          type: array
+          items:
+            type: string
+          description: Keys of attributes available to fetch.
+    FetchResponse:
+      type: object
+      properties:
+        success:
+          type: boolean
+        individual:
+          $ref: '#/components/schemas/Individual'
+    AuthStartRequest:
+      type: object
+      required:
+        - phoneNumber
+      properties:
+        phoneNumber:
+          type: string
+        clientRequestId:
+          type: string
+        finalTargetURL:
+          type: string
+          format: uri
+    AuthContinueRequest:
+      type: object
+      required:
+        - authId
+      properties:
+        authId:
+          type: string
+          description: Identifier returned by auth start.
+    AuthResponse:
+      type: object
+      properties:
+        success:
+          type: boolean
+        authId:
+          type: string
+        evaluation:
+          type: string
+        next:
+          $ref: '#/components/schemas/Next'
+    DeviceRevokeRequest:
+      type: object
+      properties:
+        deviceId:
+          type: string
+        proveId:
+          type: string
+        phoneNumber:
+          type: string
+    EnrollIdentityRequest:
+      type: object
+      required:
+        - phoneNumber
+      properties:
+        phoneNumber:
+          type: string
+        clientCustomerId:
+          type: string
+        clientHumanId:
+          type: string
+        clientRequestId:
+          type: string
+        deviceId:
+          type: string
+        identityAttributes:
+          type: object
+          additionalProperties: true
+          description: Customer attributes to persist with the identity record.
+    Identity:
+      type: object
+      properties:
+        proveId:
+          type: string
+        phoneNumber:
+          type: string
+        clientCustomerId:
+          type: string
+        state:
+          type: string
+        identityAttributes:
+          type: object
+          additionalProperties: true
+    IdentityListResponse:
+      type: object
+      properties:
+        identities:
+          type: array
+          items:
+            $ref: '#/components/schemas/Identity'
+        lastKey:
+          type: string
+          description: Pagination token; pass as startKey for the next page.
+    Individual:
+      type: object
+      properties:
+        firstName:
+          type: string
+        lastName:
+          type: string
+        dob:
+          type: string
+        ssn:
+          type: string
+        emailAddresses:
+          type: array
+          items:
+            type: string
+        addresses:
+          type: array
+          items:
+            $ref: '#/components/schemas/Address'
+    Address:
+      type: object
+      properties:
+        address:
+          type: string
+        city:
+          type: string
+        region:
+          type: string
+        postalCode:
+          type: string
+    Next:
+      type: object
+      additionalProperties:
+        type: string
+      description: >-
+        Map of allowed next operations for the flow (for example
+        `v3-challenge`, `v3-complete`).
+    SuccessResponse:
+      type: object
+      properties:
+        success:
+          type: boolean
+    Error:
+      type: object
+      properties:
+        code:
+          type: string
+        message:
+          type: string
+        details:
+          type: array
+          items:
+            type: object
+            additionalProperties: true
