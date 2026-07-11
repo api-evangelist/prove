@@ -131,6 +131,8 @@ apis:
     identity record keyed to a phone number for recognition across sessions and
     domains.
 common:
+- type: DomainSecurity
+  url: security/prove-domain-security.yml
 - type: Authentication
   url: authentication/prove-authentication.yml
 - type: OAuthScopes
