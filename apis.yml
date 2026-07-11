@@ -131,6 +131,10 @@ apis:
     identity record keyed to a phone number for recognition across sessions and
     domains.
 common:
+- type: Authentication
+  url: authentication/prove-authentication.yml
+- type: OAuthScopes
+  url: scopes/prove-scopes.yml
 - type: GitHubOrganization
   url: https://github.com/prove-identity
 - type: LinkedIn
@@ -145,6 +149,8 @@ common:
   url: rate-limits/prove-rate-limits.yml
 - type: FinOps
   url: finops/prove-finops.yml
+- url: https://www.prove.com/blog
+  type: Blog
 maintainers:
 - FN: Kin Lane
   email: kin@apievangelist.com

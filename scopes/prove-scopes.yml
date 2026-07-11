@@ -1,0 +1,16 @@
+generated: '2026-07-11'
+method: derived
+source: openapi/prove-openapi.yml
+docs: https://developer.prove.com/tutorial/access-api-keys
+note: Prove's API uses an OAuth 2.0 client_credentials flow with no published scopes
+  - access is governed by the client_id/client_secret credentials themselves, and
+  Prove's official server SDKs request tokens with an empty scope list (see
+  https://developer.prove.com/tutorial/access-api-keys and
+  https://github.com/prove-identity/prove-sdk-server-go).
+schemes:
+- name: oauth2
+  source: openapi/prove-openapi.yml
+  flows:
+  - flow: clientCredentials
+    tokenUrl: https://api.prove.com/v3/token
+scopes: []
