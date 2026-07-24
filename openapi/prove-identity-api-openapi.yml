@@ -1,0 +1,281 @@
+openapi: 3.0.1
+info:
+  title: Prove Auth Identity API
+  description: 'Phone-centric identity verification and authentication API. The Prove API (v3) uses a consumer''s mobile phone number and cryptographic possession signals to power the Pre-Fill verification flow (start, validate, challenge, complete), Unified Authentication / Trust Score (unify, unify-bind, unify-status), identity discovery (discover, fetch), phone-based Auth, and a persistent Identity Manager. All endpoints are OAuth 2.0 (client-credentials) secured; obtain a Bearer access token from the /token endpoint and send it as `Authorization: Bearer <token>` on every subsequent request.'
+  termsOfService: https://www.prove.com/legal/terms
+  contact:
+    name: Prove Developer Support
+    url: https://developer.prove.com
+  version: '3.0'
+servers:
+- url: https://api.prove.com/v3
+  description: Production
+- url: https://platform.proveapis.com/v3
+  description: Production (platform host)
+- url: https://platform.uat.proveapis.com/v3
+  description: UAT / Sandbox
+security:
+- bearerAuth: []
+tags:
+- name: Identity
+  description: Persistent identity lifecycle management.
+paths:
+  /identity:
+    get:
+      operationId: v3BatchGetIdentities
+      tags:
+      - Identity
+      summary: Batch get identities
+      description: Returns a paginated page of enrolled identities. Pass the lastKey from a previous response as startKey to page forward.
+      parameters:
+      - name: startKey
+        in: query
+        required: false
+        description: Pagination token returned as lastKey from a previous call.
+        schema:
+          type: string
+      responses:
+        '200':
+          description: A page of identities.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/IdentityListResponse'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+    post:
+      operationId: v3EnrollIdentity
+      tags:
+      - Identity
+      summary: Enroll an identity
+      description: Enrolls a customer identity keyed to a phone number for persistent recognition across sessions.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/EnrollIdentityRequest'
+      responses:
+        '200':
+          description: Identity enrolled.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Identity'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+  /identity/batch:
+    post:
+      operationId: v3BatchEnrollIdentities
+      tags:
+      - Identity
+      summary: Batch enroll identities
+      description: Enrolls multiple customers (up to 100) in a single request for efficient bulk operations.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                identities:
+                  type: array
+                  maxItems: 100
+                  items:
+                    $ref: '#/components/schemas/EnrollIdentityRequest'
+      responses:
+        '200':
+          description: Identities enrolled.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/IdentityListResponse'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+  /identity/{mobileNumber}/lookup:
+    get:
+      operationId: v3GetIdentitiesByPhoneNumber
+      tags:
+      - Identity
+      summary: Get identities by phone number
+      description: Returns enrolled identities associated with a given mobile number.
+      parameters:
+      - name: mobileNumber
+        in: path
+        required: true
+        description: E.164 or local mobile number to look up.
+        schema:
+          type: string
+      responses:
+        '200':
+          description: Matching identities.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/IdentityListResponse'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+  /identity/{proveId}:
+    get:
+      operationId: v3GetIdentity
+      tags:
+      - Identity
+      summary: Get an identity
+      description: Returns a single enrolled identity by its Prove identity ID.
+      parameters:
+      - name: proveId
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: The identity.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Identity'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+    delete:
+      operationId: v3DisenrollIdentity
+      tags:
+      - Identity
+      summary: Disenroll an identity
+      description: Removes an enrolled identity by its Prove identity ID.
+      parameters:
+      - name: proveId
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: Identity disenrolled.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SuccessResponse'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+  /identity/{identityId}/cross-domain:
+    post:
+      operationId: v3CrossDomainIdentity
+      tags:
+      - Identity
+      summary: Cross-domain identity
+      description: Shares or resolves an enrolled identity across linked domains.
+      parameters:
+      - name: identityId
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: Cross-domain result.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Identity'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+components:
+  schemas:
+    IdentityListResponse:
+      type: object
+      properties:
+        identities:
+          type: array
+          items:
+            $ref: '#/components/schemas/Identity'
+        lastKey:
+          type: string
+          description: Pagination token; pass as startKey for the next page.
+    Identity:
+      type: object
+      properties:
+        proveId:
+          type: string
+        phoneNumber:
+          type: string
+        clientCustomerId:
+          type: string
+        state:
+          type: string
+        identityAttributes:
+          type: object
+          additionalProperties: true
+    Error:
+      type: object
+      properties:
+        code:
+          type: string
+        message:
+          type: string
+        details:
+          type: array
+          items:
+            type: object
+            additionalProperties: true
+    EnrollIdentityRequest:
+      type: object
+      required:
+      - phoneNumber
+      properties:
+        phoneNumber:
+          type: string
+        clientCustomerId:
+          type: string
+        clientHumanId:
+          type: string
+        clientRequestId:
+          type: string
+        deviceId:
+          type: string
+        identityAttributes:
+          type: object
+          additionalProperties: true
+          description: Customer attributes to persist with the identity record.
+    SuccessResponse:
+      type: object
+      properties:
+        success:
+          type: boolean
+  responses:
+    NotFound:
+      description: The requested resource was not found.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    BadRequest:
+      description: The request was malformed or failed validation.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    Unauthorized:
+      description: Missing, invalid, or expired access token.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+      description: OAuth 2.0 client-credentials Bearer access token obtained from POST /token.
+    oauth2:
+      type: oauth2
+      flows:
+        clientCredentials:
+          tokenUrl: https://api.prove.com/v3/token
+          scopes: {}

@@ -1,0 +1,206 @@
+openapi: 3.0.1
+info:
+  title: Prove Auth Trust Score API
+  description: 'Phone-centric identity verification and authentication API. The Prove API (v3) uses a consumer''s mobile phone number and cryptographic possession signals to power the Pre-Fill verification flow (start, validate, challenge, complete), Unified Authentication / Trust Score (unify, unify-bind, unify-status), identity discovery (discover, fetch), phone-based Auth, and a persistent Identity Manager. All endpoints are OAuth 2.0 (client-credentials) secured; obtain a Bearer access token from the /token endpoint and send it as `Authorization: Bearer <token>` on every subsequent request.'
+  termsOfService: https://www.prove.com/legal/terms
+  contact:
+    name: Prove Developer Support
+    url: https://developer.prove.com
+  version: '3.0'
+servers:
+- url: https://api.prove.com/v3
+  description: Production
+- url: https://platform.proveapis.com/v3
+  description: Production (platform host)
+- url: https://platform.uat.proveapis.com/v3
+  description: UAT / Sandbox
+security:
+- bearerAuth: []
+tags:
+- name: Trust Score
+  description: Unified Authentication possession and trust evaluation.
+paths:
+  /unify:
+    post:
+      operationId: v3UnifyRequest
+      tags:
+      - Trust Score
+      summary: Start a Unified Authentication flow
+      description: Initiates a Unify (Unified Authentication) flow that passively recognizes a returning customer by phone possession and an optional bound Prove Key, returning a correlation ID and the set of allowed next calls.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/V3UnifyRequest'
+      responses:
+        '200':
+          description: Unify flow started.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/V3FlowResponse'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+  /unify-bind:
+    post:
+      operationId: v3UnifyBindRequest
+      tags:
+      - Trust Score
+      summary: Bind a Prove Key to a Unify session
+      description: Binds a Prove Key to the phone number of a Unify session and returns the possession result so the customer can be passively recognized on future visits.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/V3CorrelationRequest'
+      responses:
+        '200':
+          description: Prove Key bound.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/V3FlowResponse'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+  /unify-status:
+    post:
+      operationId: v3UnifyStatusRequest
+      tags:
+      - Trust Score
+      summary: Get Unify session status and trust result
+      description: Checks the status of a Unify session and returns the possession and trust evaluation used to make a risk-aware authentication decision.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/V3CorrelationRequest'
+      responses:
+        '200':
+          description: Unify status.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/V3UnifyStatusResponse'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+components:
+  responses:
+    BadRequest:
+      description: The request was malformed or failed validation.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    Unauthorized:
+      description: Missing, invalid, or expired access token.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+  schemas:
+    Error:
+      type: object
+      properties:
+        code:
+          type: string
+        message:
+          type: string
+        details:
+          type: array
+          items:
+            type: object
+            additionalProperties: true
+    V3UnifyRequest:
+      type: object
+      required:
+      - phoneNumber
+      properties:
+        phoneNumber:
+          type: string
+        finalTargetURL:
+          type: string
+          format: uri
+        emailAddress:
+          type: string
+        ipAddress:
+          type: string
+        smsMessage:
+          type: string
+        possessionType:
+          type: string
+          enum:
+          - desktop
+          - mobile
+          - none
+        clientCustomerId:
+          type: string
+        clientHumanId:
+          type: string
+        clientRequestId:
+          type: string
+        deviceId:
+          type: string
+        proveId:
+          type: string
+        rebind:
+          type: boolean
+        checkReputation:
+          type: boolean
+        allowOTPRetry:
+          type: boolean
+    V3FlowResponse:
+      type: object
+      properties:
+        success:
+          type: boolean
+        correlationId:
+          type: string
+        next:
+          $ref: '#/components/schemas/Next'
+    V3UnifyStatusResponse:
+      type: object
+      properties:
+        success:
+          type: boolean
+        correlationId:
+          type: string
+        evaluation:
+          type: string
+        possessionResult:
+          type: string
+        next:
+          $ref: '#/components/schemas/Next'
+    V3CorrelationRequest:
+      type: object
+      required:
+      - correlationId
+      properties:
+        correlationId:
+          type: string
+          pattern: ^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$
+    Next:
+      type: object
+      additionalProperties:
+        type: string
+      description: Map of allowed next operations for the flow (for example `v3-challenge`, `v3-complete`).
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+      description: OAuth 2.0 client-credentials Bearer access token obtained from POST /token.
+    oauth2:
+      type: oauth2
+      flows:
+        clientCredentials:
+          tokenUrl: https://api.prove.com/v3/token
+          scopes: {}

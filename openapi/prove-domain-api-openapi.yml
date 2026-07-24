@@ -1,0 +1,142 @@
+openapi: 3.0.1
+info:
+  title: Prove Auth Domain API
+  description: 'Phone-centric identity verification and authentication API. The Prove API (v3) uses a consumer''s mobile phone number and cryptographic possession signals to power the Pre-Fill verification flow (start, validate, challenge, complete), Unified Authentication / Trust Score (unify, unify-bind, unify-status), identity discovery (discover, fetch), phone-based Auth, and a persistent Identity Manager. All endpoints are OAuth 2.0 (client-credentials) secured; obtain a Bearer access token from the /token endpoint and send it as `Authorization: Bearer <token>` on every subsequent request.'
+  termsOfService: https://www.prove.com/legal/terms
+  contact:
+    name: Prove Developer Support
+    url: https://developer.prove.com
+  version: '3.0'
+servers:
+- url: https://api.prove.com/v3
+  description: Production
+- url: https://platform.proveapis.com/v3
+  description: Production (platform host)
+- url: https://platform.uat.proveapis.com/v3
+  description: UAT / Sandbox
+security:
+- bearerAuth: []
+tags:
+- name: Domain
+  description: Cross-domain linking of identity scopes.
+paths:
+  /domain/link:
+    post:
+      operationId: v3DomainLinkRequest
+      tags:
+      - Domain
+      summary: Link a domain
+      description: Initiates linking the current domain to another domain so identities can be shared.
+      responses:
+        '200':
+          description: Link initiated.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SuccessResponse'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+  /domain/confirm-link:
+    post:
+      operationId: v3DomainConfirmLinkRequest
+      tags:
+      - Domain
+      summary: Confirm a domain link
+      description: Confirms a pending domain link request.
+      responses:
+        '200':
+          description: Link confirmed.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SuccessResponse'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+  /domain/unlink:
+    post:
+      operationId: v3DomainUnlinkRequest
+      tags:
+      - Domain
+      summary: Unlink a domain
+      description: Removes a link between two domains.
+      responses:
+        '200':
+          description: Link removed.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SuccessResponse'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+  /domain/id:
+    get:
+      operationId: v3DomainIDRequest
+      tags:
+      - Domain
+      summary: Get domain details
+      description: Returns details about the current domain.
+      responses:
+        '200':
+          description: Domain details.
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: true
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+  /domain/linked:
+    get:
+      operationId: v3DomainLinkedRequest
+      tags:
+      - Domain
+      summary: List linked domains
+      description: Returns the list of domains linked to the current domain.
+      responses:
+        '200':
+          description: Linked domains.
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: true
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+components:
+  schemas:
+    SuccessResponse:
+      type: object
+      properties:
+        success:
+          type: boolean
+    Error:
+      type: object
+      properties:
+        code:
+          type: string
+        message:
+          type: string
+        details:
+          type: array
+          items:
+            type: object
+            additionalProperties: true
+  responses:
+    Unauthorized:
+      description: Missing, invalid, or expired access token.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+      description: OAuth 2.0 client-credentials Bearer access token obtained from POST /token.
+    oauth2:
+      type: oauth2
+      flows:
+        clientCredentials:
+          tokenUrl: https://api.prove.com/v3/token
+          scopes: {}

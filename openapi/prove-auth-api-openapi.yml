@@ -1,0 +1,193 @@
+openapi: 3.0.1
+info:
+  title: Prove Auth API
+  description: 'Phone-centric identity verification and authentication API. The Prove API (v3) uses a consumer''s mobile phone number and cryptographic possession signals to power the Pre-Fill verification flow (start, validate, challenge, complete), Unified Authentication / Trust Score (unify, unify-bind, unify-status), identity discovery (discover, fetch), phone-based Auth, and a persistent Identity Manager. All endpoints are OAuth 2.0 (client-credentials) secured; obtain a Bearer access token from the /token endpoint and send it as `Authorization: Bearer <token>` on every subsequent request.'
+  termsOfService: https://www.prove.com/legal/terms
+  contact:
+    name: Prove Developer Support
+    url: https://developer.prove.com
+  version: '3.0'
+servers:
+- url: https://api.prove.com/v3
+  description: Production
+- url: https://platform.proveapis.com/v3
+  description: Production (platform host)
+- url: https://platform.uat.proveapis.com/v3
+  description: UAT / Sandbox
+security:
+- bearerAuth: []
+tags:
+- name: Auth
+  description: Phone-based authentication and device binding.
+paths:
+  /server/auth/start:
+    post:
+      operationId: authStartRequest
+      tags:
+      - Auth
+      summary: Start a phone authentication flow
+      description: Begins a phone-based authentication flow for a known customer, returning an auth identifier used to drive the client possession challenge.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AuthStartRequest'
+      responses:
+        '200':
+          description: Auth flow started.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AuthResponse'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+  /server/auth/continue:
+    post:
+      operationId: authContinueRequest
+      tags:
+      - Auth
+      summary: Continue a phone authentication flow
+      description: Continues an in-progress authentication flow with intermediate possession data.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AuthContinueRequest'
+      responses:
+        '200':
+          description: Auth flow continued.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AuthResponse'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+  /server/auth/finish:
+    post:
+      operationId: authFinishRequest
+      tags:
+      - Auth
+      summary: Finish a phone authentication flow
+      description: Completes the auth flow and returns the final authentication result for the customer's phone possession.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AuthContinueRequest'
+      responses:
+        '200':
+          description: Auth result.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AuthResponse'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+  /device/revoke:
+    post:
+      operationId: v3DeviceRevokeRequest
+      tags:
+      - Auth
+      summary: Revoke a bound device
+      description: Revokes a previously bound device / Prove Key so it can no longer be used for passive authentication.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/DeviceRevokeRequest'
+      responses:
+        '200':
+          description: Device revoked.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SuccessResponse'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+components:
+  schemas:
+    AuthContinueRequest:
+      type: object
+      required:
+      - authId
+      properties:
+        authId:
+          type: string
+          description: Identifier returned by auth start.
+    DeviceRevokeRequest:
+      type: object
+      properties:
+        deviceId:
+          type: string
+        proveId:
+          type: string
+        phoneNumber:
+          type: string
+    Error:
+      type: object
+      properties:
+        code:
+          type: string
+        message:
+          type: string
+        details:
+          type: array
+          items:
+            type: object
+            additionalProperties: true
+    AuthStartRequest:
+      type: object
+      required:
+      - phoneNumber
+      properties:
+        phoneNumber:
+          type: string
+        clientRequestId:
+          type: string
+        finalTargetURL:
+          type: string
+          format: uri
+    AuthResponse:
+      type: object
+      properties:
+        success:
+          type: boolean
+        authId:
+          type: string
+        evaluation:
+          type: string
+        next:
+          $ref: '#/components/schemas/Next'
+    SuccessResponse:
+      type: object
+      properties:
+        success:
+          type: boolean
+    Next:
+      type: object
+      additionalProperties:
+        type: string
+      description: Map of allowed next operations for the flow (for example `v3-challenge`, `v3-complete`).
+  responses:
+    Unauthorized:
+      description: Missing, invalid, or expired access token.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+      description: OAuth 2.0 client-credentials Bearer access token obtained from POST /token.
+    oauth2:
+      type: oauth2
+      flows:
+        clientCredentials:
+          tokenUrl: https://api.prove.com/v3/token
+          scopes: {}

@@ -1,0 +1,134 @@
+openapi: 3.0.1
+info:
+  title: Prove Auth Pre-Fill API
+  description: 'Phone-centric identity verification and authentication API. The Prove API (v3) uses a consumer''s mobile phone number and cryptographic possession signals to power the Pre-Fill verification flow (start, validate, challenge, complete), Unified Authentication / Trust Score (unify, unify-bind, unify-status), identity discovery (discover, fetch), phone-based Auth, and a persistent Identity Manager. All endpoints are OAuth 2.0 (client-credentials) secured; obtain a Bearer access token from the /token endpoint and send it as `Authorization: Bearer <token>` on every subsequent request.'
+  termsOfService: https://www.prove.com/legal/terms
+  contact:
+    name: Prove Developer Support
+    url: https://developer.prove.com
+  version: '3.0'
+servers:
+- url: https://api.prove.com/v3
+  description: Production
+- url: https://platform.proveapis.com/v3
+  description: Production (platform host)
+- url: https://platform.uat.proveapis.com/v3
+  description: UAT / Sandbox
+security:
+- bearerAuth: []
+tags:
+- name: Pre-Fill
+  description: Identity discovery and verified attribute retrieval.
+paths:
+  /discover:
+    get:
+      operationId: v3DiscoverRequest
+      tags:
+      - Pre-Fill
+      summary: Discover available identity attributes
+      description: Returns which verified identity attributes Prove can provide for the session's phone number; the discovered attribute keys are then passed to /fetch to retrieve their values.
+      responses:
+        '200':
+          description: Discoverable attributes.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DiscoverResponse'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+  /fetch:
+    get:
+      operationId: v3FetchRequest
+      tags:
+      - Pre-Fill
+      summary: Fetch verified identity attribute values
+      description: Fetches the authoritative values for the identity attributes surfaced by /discover so onboarding forms can be prefilled with verified data.
+      responses:
+        '200':
+          description: Attribute values.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/FetchResponse'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+components:
+  schemas:
+    Individual:
+      type: object
+      properties:
+        firstName:
+          type: string
+        lastName:
+          type: string
+        dob:
+          type: string
+        ssn:
+          type: string
+        emailAddresses:
+          type: array
+          items:
+            type: string
+        addresses:
+          type: array
+          items:
+            $ref: '#/components/schemas/Address'
+    FetchResponse:
+      type: object
+      properties:
+        success:
+          type: boolean
+        individual:
+          $ref: '#/components/schemas/Individual'
+    Error:
+      type: object
+      properties:
+        code:
+          type: string
+        message:
+          type: string
+        details:
+          type: array
+          items:
+            type: object
+            additionalProperties: true
+    DiscoverResponse:
+      type: object
+      properties:
+        success:
+          type: boolean
+        attributes:
+          type: array
+          items:
+            type: string
+          description: Keys of attributes available to fetch.
+    Address:
+      type: object
+      properties:
+        address:
+          type: string
+        city:
+          type: string
+        region:
+          type: string
+        postalCode:
+          type: string
+  responses:
+    Unauthorized:
+      description: Missing, invalid, or expired access token.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+      description: OAuth 2.0 client-credentials Bearer access token obtained from POST /token.
+    oauth2:
+      type: oauth2
+      flows:
+        clientCredentials:
+          tokenUrl: https://api.prove.com/v3/token
+          scopes: {}
