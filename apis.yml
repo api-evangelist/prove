@@ -7,7 +7,20 @@ description: Prove is a phone-centric digital identity verification and authenti
   possession signals to power Pre-Fill identity prefill, passive Trust Score
   verification, Unified Authentication, and an Identity Manager - all behind an
   OAuth 2.0 secured REST interface at https://api.prove.com/v3.
-image: https://kinlane-images.s3.amazonaws.com/shared/apis-json/apis-json-logo.jpg
+accessModel:
+  pricing: freemium
+  onboarding: self-serve
+  trial: false
+  try_now: true
+  public: false
+  label: Freemium · Self-serve signup
+  confidence: high
+  source:
+  - plans
+  - authentication
+  generated: '2026-07-22'
+  method: derived
+image: https://kinlane-images.s3.amazonaws.com/shared/apis-json/icons/prove.png
 tags:
 - Identity Verification
 - Authentication
@@ -18,118 +31,160 @@ created: '2026-06-21'
 modified: '2026-06-21'
 specificationVersion: '0.19'
 apis:
-- aid: prove:identity-verification-v3-flows
-  name: Prove Identity Verification (v3 Flows)
-  tags:
-  - Identity Verification
-  - Pre-Fill
-  - OTP
-  - KYC
-  image: https://kinlane-images.s3.amazonaws.com/shared/apis-json/apis-json-logo.jpg
+- aid: prove:prove-auth-api
+  name: Prove Auth API
+  description: Phone-based authentication and device binding.
   humanURL: https://developer.prove.com/docs/prove-pre-fill-flow
   baseURL: https://api.prove.com/v3
-  properties:
-  - url: https://developer.prove.com/docs/prove-pre-fill-flow
-    type: Documentation
-  - url: https://developer.prove.com/reference/start-request
-    type: APIReference
-  - url: openapi/prove-openapi.yml
-    type: OpenAPI
-  - url: collections/prove.postman_collection.json
-    type: PostmanCollection
-  - url: collections/prove.opencollection.json
-    type: OpenCollection
-  description: The ordered Pre-Fill verification flow - start, validate, challenge,
-    and complete - that initiates a session against a mobile phone number, confirms
-    possession, optionally challenges with DOB/SSN, and returns reconciled, prefilled
-    identity attributes plus IDV/KYC evaluation.
-- aid: prove:trust-score
-  name: Prove Trust Score (Unified Authentication)
   tags:
-  - Trust Score
-  - Authentication
-  - Possession
-  - Risk
-  image: https://kinlane-images.s3.amazonaws.com/shared/apis-json/apis-json-logo.jpg
-  humanURL: https://developer.prove.com/reference/unify-server
-  baseURL: https://api.prove.com/v3
+  - Auth
   properties:
-  - url: https://developer.prove.com/reference/unify-server
-    type: Documentation
-  - url: openapi/prove-openapi.yml
-    type: OpenAPI
-  - url: collections/prove.postman_collection.json
-    type: PostmanCollection
-  - url: collections/prove.opencollection.json
-    type: OpenCollection
-  description: Unified Authentication (Unify) flow - unify, unify-bind, and unify-status -
-    that passively recognizes a returning customer by phone possession and a bound
-    Prove Key, returning a real-time trust and possession evaluation for risk-aware
-    decisions.
-- aid: prove:pre-fill
-  name: Prove Pre-Fill (Identity Discovery)
-  tags:
-  - Pre-Fill
-  - Identity Discovery
-  - Onboarding
-  image: https://kinlane-images.s3.amazonaws.com/shared/apis-json/apis-json-logo.jpg
-  humanURL: https://developer.prove.com/reference/prefill-identity-server
+  - type: OpenAPI
+    url: openapi/prove-auth-api-openapi.yml
+  - type: Documentation
+    url: https://developer.prove.com/docs/prove-pre-fill-flow
+  - type: APIReference
+    url: https://developer.prove.com/reference/start-request
+  - type: PostmanCollection
+    url: collections/prove.postman_collection.json
+  - type: OpenCollection
+    url: collections/prove.opencollection.json
+  - type: Documentation
+    url: https://developer.prove.com/reference/unify-server
+  - type: Documentation
+    url: https://developer.prove.com/reference/prefill-identity-server
+- aid: prove:prove-authentication-api
+  name: Prove Authentication API
+  description: OAuth 2.0 token issuance.
+  humanURL: https://developer.prove.com/docs/prove-pre-fill-flow
   baseURL: https://api.prove.com/v3
-  properties:
-  - url: https://developer.prove.com/reference/prefill-identity-server
-    type: Documentation
-  - url: openapi/prove-openapi.yml
-    type: OpenAPI
-  - url: collections/prove.postman_collection.json
-    type: PostmanCollection
-  - url: collections/prove.opencollection.json
-    type: OpenCollection
-  description: Identity discovery and attribute retrieval - discover and fetch - that
-    surface which verified identity attributes Prove can return for a phone number
-    and then fetch the authoritative attribute values to prefill onboarding forms.
-- aid: prove:auth
-  name: Prove Auth
   tags:
   - Authentication
-  - Phone Auth
-  - Device Binding
-  image: https://kinlane-images.s3.amazonaws.com/shared/apis-json/apis-json-logo.jpg
-  humanURL: https://developer.prove.com/reference/unify-server
-  baseURL: https://api.prove.com/v3
   properties:
-  - url: https://developer.prove.com/reference/unify-server
-    type: Documentation
-  - url: openapi/prove-openapi.yml
-    type: OpenAPI
-  - url: collections/prove.postman_collection.json
-    type: PostmanCollection
-  - url: collections/prove.opencollection.json
-    type: OpenCollection
-  description: Phone-based authentication - auth start, continue, and finish, plus
-    device revoke - that authenticates a known customer via mobile possession and
-    cryptographic device binding for step-up and ongoing authentication.
-- aid: prove:identity
-  name: Prove Identity Manager
+  - type: OpenAPI
+    url: openapi/prove-authentication-api-openapi.yml
+  - type: Documentation
+    url: https://developer.prove.com/docs/prove-pre-fill-flow
+  - type: APIReference
+    url: https://developer.prove.com/reference/start-request
+  - type: PostmanCollection
+    url: collections/prove.postman_collection.json
+  - type: OpenCollection
+    url: collections/prove.opencollection.json
+  - type: Documentation
+    url: https://developer.prove.com/reference/unify-server
+  - type: Documentation
+    url: https://developer.prove.com/reference/prefill-identity-server
+- aid: prove:prove-domain-api
+  name: Prove Domain API
+  description: Cross-domain linking of identity scopes.
+  humanURL: https://developer.prove.com/docs/prove-pre-fill-flow
+  baseURL: https://api.prove.com/v3
+  tags:
+  - Domain
+  properties:
+  - type: OpenAPI
+    url: openapi/prove-domain-api-openapi.yml
+  - type: Documentation
+    url: https://developer.prove.com/docs/prove-pre-fill-flow
+  - type: APIReference
+    url: https://developer.prove.com/reference/start-request
+  - type: PostmanCollection
+    url: collections/prove.postman_collection.json
+  - type: OpenCollection
+    url: collections/prove.opencollection.json
+  - type: Documentation
+    url: https://developer.prove.com/reference/unify-server
+  - type: Documentation
+    url: https://developer.prove.com/reference/prefill-identity-server
+- aid: prove:prove-identity-api
+  name: Prove Identity API
+  description: Persistent identity lifecycle management.
+  humanURL: https://developer.prove.com/docs/prove-pre-fill-flow
+  baseURL: https://api.prove.com/v3
   tags:
   - Identity
-  - Enrollment
-  - Lifecycle
-  image: https://kinlane-images.s3.amazonaws.com/shared/apis-json/apis-json-logo.jpg
-  humanURL: https://developer.prove.com/reference/prefill-identity-server
-  baseURL: https://api.prove.com/v3
   properties:
-  - url: https://developer.prove.com/reference/prefill-identity-server
-    type: Documentation
-  - url: openapi/prove-openapi.yml
-    type: OpenAPI
-  - url: collections/prove.postman_collection.json
-    type: PostmanCollection
-  - url: collections/prove.opencollection.json
-    type: OpenCollection
-  description: Identity lifecycle management - enroll, batch enroll, get, lookup by
-    phone number, cross-domain, and disenroll - that maintains a persistent customer
-    identity record keyed to a phone number for recognition across sessions and
-    domains.
+  - type: OpenAPI
+    url: openapi/prove-identity-api-openapi.yml
+  - type: Documentation
+    url: https://developer.prove.com/docs/prove-pre-fill-flow
+  - type: APIReference
+    url: https://developer.prove.com/reference/start-request
+  - type: PostmanCollection
+    url: collections/prove.postman_collection.json
+  - type: OpenCollection
+    url: collections/prove.opencollection.json
+  - type: Documentation
+    url: https://developer.prove.com/reference/unify-server
+  - type: Documentation
+    url: https://developer.prove.com/reference/prefill-identity-server
+- aid: prove:prove-identity-verification-api
+  name: Prove Identity Verification API
+  description: Ordered Pre-Fill verification flow - start, validate, challenge, complete.
+  humanURL: https://developer.prove.com/docs/prove-pre-fill-flow
+  baseURL: https://api.prove.com/v3
+  tags:
+  - Identity Verification
+  properties:
+  - type: OpenAPI
+    url: openapi/prove-identity-verification-api-openapi.yml
+  - type: Documentation
+    url: https://developer.prove.com/docs/prove-pre-fill-flow
+  - type: APIReference
+    url: https://developer.prove.com/reference/start-request
+  - type: PostmanCollection
+    url: collections/prove.postman_collection.json
+  - type: OpenCollection
+    url: collections/prove.opencollection.json
+  - type: Documentation
+    url: https://developer.prove.com/reference/unify-server
+  - type: Documentation
+    url: https://developer.prove.com/reference/prefill-identity-server
+- aid: prove:prove-pre-fill-api
+  name: Prove Pre-Fill API
+  description: Identity discovery and verified attribute retrieval.
+  humanURL: https://developer.prove.com/docs/prove-pre-fill-flow
+  baseURL: https://api.prove.com/v3
+  tags:
+  - Pre-Fill
+  properties:
+  - type: OpenAPI
+    url: openapi/prove-pre-fill-api-openapi.yml
+  - type: Documentation
+    url: https://developer.prove.com/docs/prove-pre-fill-flow
+  - type: APIReference
+    url: https://developer.prove.com/reference/start-request
+  - type: PostmanCollection
+    url: collections/prove.postman_collection.json
+  - type: OpenCollection
+    url: collections/prove.opencollection.json
+  - type: Documentation
+    url: https://developer.prove.com/reference/unify-server
+  - type: Documentation
+    url: https://developer.prove.com/reference/prefill-identity-server
+- aid: prove:prove-trust-score-api
+  name: Prove Trust Score API
+  description: Unified Authentication possession and trust evaluation.
+  humanURL: https://developer.prove.com/docs/prove-pre-fill-flow
+  baseURL: https://api.prove.com/v3
+  tags:
+  - Trust Score
+  properties:
+  - type: OpenAPI
+    url: openapi/prove-trust-score-api-openapi.yml
+  - type: Documentation
+    url: https://developer.prove.com/docs/prove-pre-fill-flow
+  - type: APIReference
+    url: https://developer.prove.com/reference/start-request
+  - type: PostmanCollection
+    url: collections/prove.postman_collection.json
+  - type: OpenCollection
+    url: collections/prove.opencollection.json
+  - type: Documentation
+    url: https://developer.prove.com/reference/unify-server
+  - type: Documentation
+    url: https://developer.prove.com/reference/prefill-identity-server
 common:
 - type: AgenticAccess
   url: agentic-access/prove-agentic-access.yml
