@@ -1,0 +1,26 @@
+{
+  "provider": "prove",
+  "sources": [
+    "prove-auth-api-openapi.yml",
+    "prove-authentication-api-openapi.yml",
+    "prove-domain-api-openapi.yml",
+    "prove-identity-api-openapi.yml",
+    "prove-identity-verification-api-openapi.yml",
+    "prove-pre-fill-api-openapi.yml",
+    "prove-trust-score-api-openapi.yml"
+  ],
+  "outputs": [
+    "prove-auth-api-openapi.yml",
+    "prove-authentication-api-openapi.yml",
+    "prove-domain-api-openapi.yml",
+    "prove-identity-api-openapi.yml",
+    "prove-identity-verification-api-openapi.yml",
+    "prove-pre-fill-api-openapi.yml",
+    "prove-trust-score-api-openapi.yml"
+  ],
+  "archived": [],
+  "errors": [],
+  "warnings": [],
+  "notes": [],
+  "skipped": []
+}
