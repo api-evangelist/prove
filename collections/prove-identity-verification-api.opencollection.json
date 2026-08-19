@@ -1,0 +1,84 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Prove Auth Identity Verification API",
+    "version": "3.0"
+  },
+  "request": {
+    "auth": {
+      "type": "bearer",
+      "token": "{{bearerToken}}"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Identity Verification",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Start a Pre-Fill verification flow",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.prove.com/v3/start",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Initiates the identity verification session against a mobile phone number, indicates whether the session is desktop or mobile, and returns a correlation ID plus an auth token and the set of allowed next calls."
+        },
+        {
+          "info": {
+            "name": "Validate the started flow",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.prove.com/v3/validate",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Validates the initiated flow against the correlation ID returned by /start and confirms phone possession. The response Next field indicates whether a challenge is required before completing."
+        },
+        {
+          "info": {
+            "name": "Challenge the customer",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.prove.com/v3/challenge",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "When /validate returns `v3-challenge` in its Next field, submit a knowledge challenge (date of birth and/or last four of SSN) to raise assurance before completing the flow."
+        },
+        {
+          "info": {
+            "name": "Complete the Pre-Fill flow",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.prove.com/v3/complete",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Final call in the flow. Submits the customer's claimed identity for real-time reconciliation against the phone number and returns the IDV / KYC evaluation and prefilled identity attributes."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

@@ -1,0 +1,46 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Prove Auth Pre-Fill API",
+    "version": "3.0"
+  },
+  "request": {
+    "auth": {
+      "type": "bearer",
+      "token": "{{bearerToken}}"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Pre-Fill",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Discover available identity attributes",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.prove.com/v3/discover"
+          },
+          "docs": "Returns which verified identity attributes Prove can provide for the session's phone number; the discovered attribute keys are then passed to /fetch to retrieve their values."
+        },
+        {
+          "info": {
+            "name": "Fetch verified identity attribute values",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.prove.com/v3/fetch"
+          },
+          "docs": "Fetches the authoritative values for the identity attributes surfaced by /discover so onboarding forms can be prefilled with verified data."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

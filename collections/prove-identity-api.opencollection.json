@@ -1,0 +1,146 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Prove Auth Identity API",
+    "version": "3.0"
+  },
+  "request": {
+    "auth": {
+      "type": "bearer",
+      "token": "{{bearerToken}}"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Identity",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Batch get identities",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.prove.com/v3/identity",
+            "params": [
+              {
+                "name": "startKey",
+                "value": "",
+                "type": "query",
+                "description": "Pagination token returned as lastKey from a previous call."
+              }
+            ]
+          },
+          "docs": "Returns a paginated page of enrolled identities. Pass the lastKey from a previous response as startKey to page forward."
+        },
+        {
+          "info": {
+            "name": "Enroll an identity",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.prove.com/v3/identity",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Enrolls a customer identity keyed to a phone number for persistent recognition across sessions."
+        },
+        {
+          "info": {
+            "name": "Batch enroll identities",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.prove.com/v3/identity/batch",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Enrolls multiple customers (up to 100) in a single request for efficient bulk operations."
+        },
+        {
+          "info": {
+            "name": "Get identities by phone number",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.prove.com/v3/identity/:mobileNumber/lookup",
+            "params": [
+              {
+                "name": "mobileNumber",
+                "value": "",
+                "type": "path",
+                "description": "E.164 or local mobile number to look up."
+              }
+            ]
+          },
+          "docs": "Returns enrolled identities associated with a given mobile number."
+        },
+        {
+          "info": {
+            "name": "Get an identity",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.prove.com/v3/identity/:proveId",
+            "params": [
+              {
+                "name": "proveId",
+                "value": "",
+                "type": "path"
+              }
+            ]
+          },
+          "docs": "Returns a single enrolled identity by its Prove identity ID."
+        },
+        {
+          "info": {
+            "name": "Disenroll an identity",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "https://api.prove.com/v3/identity/:proveId",
+            "params": [
+              {
+                "name": "proveId",
+                "value": "",
+                "type": "path"
+              }
+            ]
+          },
+          "docs": "Removes an enrolled identity by its Prove identity ID."
+        },
+        {
+          "info": {
+            "name": "Cross-domain identity",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.prove.com/v3/identity/:identityId/cross-domain",
+            "params": [
+              {
+                "name": "identityId",
+                "value": "",
+                "type": "path"
+              }
+            ]
+          },
+          "docs": "Shares or resolves an enrolled identity across linked domains."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

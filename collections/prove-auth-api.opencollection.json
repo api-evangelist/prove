@@ -1,0 +1,84 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Prove Auth API",
+    "version": "3.0"
+  },
+  "request": {
+    "auth": {
+      "type": "bearer",
+      "token": "{{bearerToken}}"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Auth",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Start a phone authentication flow",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.prove.com/v3/server/auth/start",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Begins a phone-based authentication flow for a known customer, returning an auth identifier used to drive the client possession challenge."
+        },
+        {
+          "info": {
+            "name": "Continue a phone authentication flow",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.prove.com/v3/server/auth/continue",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Continues an in-progress authentication flow with intermediate possession data."
+        },
+        {
+          "info": {
+            "name": "Finish a phone authentication flow",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.prove.com/v3/server/auth/finish",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Completes the auth flow and returns the final authentication result for the customer's phone possession."
+        },
+        {
+          "info": {
+            "name": "Revoke a bound device",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.prove.com/v3/device/revoke",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Revokes a previously bound device / Prove Key so it can no longer be used for passive authentication."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

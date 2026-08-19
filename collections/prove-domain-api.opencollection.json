@@ -1,0 +1,79 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Prove Auth Domain API",
+    "version": "3.0"
+  },
+  "request": {
+    "auth": {
+      "type": "bearer",
+      "token": "{{bearerToken}}"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Domain",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Link a domain",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.prove.com/v3/domain/link"
+          },
+          "docs": "Initiates linking the current domain to another domain so identities can be shared."
+        },
+        {
+          "info": {
+            "name": "Confirm a domain link",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.prove.com/v3/domain/confirm-link"
+          },
+          "docs": "Confirms a pending domain link request."
+        },
+        {
+          "info": {
+            "name": "Unlink a domain",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.prove.com/v3/domain/unlink"
+          },
+          "docs": "Removes a link between two domains."
+        },
+        {
+          "info": {
+            "name": "Get domain details",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.prove.com/v3/domain/id"
+          },
+          "docs": "Returns details about the current domain."
+        },
+        {
+          "info": {
+            "name": "List linked domains",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.prove.com/v3/domain/linked"
+          },
+          "docs": "Returns the list of domains linked to the current domain."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}
