@@ -37,6 +37,8 @@ apis:
   humanURL: https://developer.prove.com/docs/prove-pre-fill-flow
   baseURL: https://api.prove.com/v3
   tags:
+  - Authentication
+  tags_raw:
   - Auth
   properties:
   - type: OpenAPI
