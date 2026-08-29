@@ -7,6 +7,18 @@ description: Prove is a phone-centric digital identity verification and authenti
   possession signals to power Pre-Fill identity prefill, passive Trust Score
   verification, Unified Authentication, and an Identity Manager - all behind an
   OAuth 2.0 secured REST interface at https://api.prove.com/v3.
+deliveryModel:
+  model: saas
+  open_source: false
+  commercial: true
+  callable_host: true
+  label: Hosted service · you call their endpoint
+  confidence: high
+  source:
+  - openapi
+  - pricing
+  generated: '2026-08-28'
+  method: derived
 accessModel:
   pricing: freemium
   onboarding: self-serve
