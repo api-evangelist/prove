@@ -1,7 +1,7 @@
-openapi: 3.0.1
+openapi: 3.2.0
 info:
-  title: Prove Auth Identity API
-  description: 'Phone-centric identity verification and authentication API. The Prove API (v3) uses a consumer''s mobile phone number and cryptographic possession signals to power the Pre-Fill verification flow (start, validate, challenge, complete), Unified Authentication / Trust Score (unify, unify-bind, unify-status), identity discovery (discover, fetch), phone-based Auth, and a persistent Identity Manager. All endpoints are OAuth 2.0 (client-credentials) secured; obtain a Bearer access token from the /token endpoint and send it as `Authorization: Bearer <token>` on every subsequent request.'
+  title: Prove Identity API
+  description: Phone-centric identity verification and authentication API.
   termsOfService: https://www.prove.com/legal/terms
   contact:
     name: Prove Developer Support
@@ -187,17 +187,31 @@ paths:
         '401':
           $ref: '#/components/responses/Unauthorized'
 components:
+  responses:
+    Unauthorized:
+      description: Missing, invalid, or expired access token.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    NotFound:
+      description: The requested resource was not found.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    BadRequest:
+      description: The request was malformed or failed validation.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
   schemas:
-    IdentityListResponse:
+    SuccessResponse:
       type: object
       properties:
-        identities:
-          type: array
-          items:
-            $ref: '#/components/schemas/Identity'
-        lastKey:
-          type: string
-          description: Pagination token; pass as startKey for the next page.
+        success:
+          type: boolean
     Identity:
       type: object
       properties:
@@ -212,18 +226,16 @@ components:
         identityAttributes:
           type: object
           additionalProperties: true
-    Error:
+    IdentityListResponse:
       type: object
       properties:
-        code:
-          type: string
-        message:
-          type: string
-        details:
+        identities:
           type: array
           items:
-            type: object
-            additionalProperties: true
+            $ref: '#/components/schemas/Identity'
+        lastKey:
+          type: string
+          description: Pagination token; pass as startKey for the next page.
     EnrollIdentityRequest:
       type: object
       required:
@@ -243,30 +255,18 @@ components:
           type: object
           additionalProperties: true
           description: Customer attributes to persist with the identity record.
-    SuccessResponse:
+    Error:
       type: object
       properties:
-        success:
-          type: boolean
-  responses:
-    NotFound:
-      description: The requested resource was not found.
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
-    BadRequest:
-      description: The request was malformed or failed validation.
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
-    Unauthorized:
-      description: Missing, invalid, or expired access token.
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
+        code:
+          type: string
+        message:
+          type: string
+        details:
+          type: array
+          items:
+            type: object
+            additionalProperties: true
   securitySchemes:
     bearerAuth:
       type: http

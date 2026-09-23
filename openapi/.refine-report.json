@@ -1,13 +1,7 @@
 {
   "provider": "prove",
   "sources": [
-    "prove-auth-api-openapi.yml",
-    "prove-authentication-api-openapi.yml",
-    "prove-domain-api-openapi.yml",
-    "prove-identity-api-openapi.yml",
-    "prove-identity-verification-api-openapi.yml",
-    "prove-pre-fill-api-openapi.yml",
-    "prove-trust-score-api-openapi.yml"
+    "_original/prove-openapi.yml"
   ],
   "outputs": [
     "prove-auth-api-openapi.yml",
@@ -21,6 +15,18 @@
   "archived": [],
   "errors": [],
   "warnings": [],
-  "notes": [],
-  "skipped": []
+  "notes": [
+    "sourced from openapi/_original/ (1 archived document(s)); previously refined output at the top level was skipped rather than re-split",
+    "prove-openapi.yml: upgraded openapi 3.0.1 -> OpenAPI 3.2.0",
+    "apis.yml register: already-registered"
+  ],
+  "skipped": [
+    "prove-auth-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "prove-authentication-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "prove-domain-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "prove-identity-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "prove-identity-verification-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "prove-pre-fill-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "prove-trust-score-api-openapi.yml: previously refined output, superseded by openapi/_original/"
+  ]
 }

@@ -1,7 +1,7 @@
-openapi: 3.0.1
+openapi: 3.2.0
 info:
   title: Prove Auth API
-  description: 'Phone-centric identity verification and authentication API. The Prove API (v3) uses a consumer''s mobile phone number and cryptographic possession signals to power the Pre-Fill verification flow (start, validate, challenge, complete), Unified Authentication / Trust Score (unify, unify-bind, unify-status), identity discovery (discover, fetch), phone-based Auth, and a persistent Identity Manager. All endpoints are OAuth 2.0 (client-credentials) secured; obtain a Bearer access token from the /token endpoint and send it as `Authorization: Bearer <token>` on every subsequent request.'
+  description: Phone-centric identity verification and authentication API.
   termsOfService: https://www.prove.com/legal/terms
   contact:
     name: Prove Developer Support
@@ -109,36 +109,24 @@ paths:
         '401':
           $ref: '#/components/responses/Unauthorized'
 components:
+  responses:
+    Unauthorized:
+      description: Missing, invalid, or expired access token.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
   schemas:
-    AuthContinueRequest:
-      type: object
-      required:
-      - authId
-      properties:
-        authId:
-          type: string
-          description: Identifier returned by auth start.
-    DeviceRevokeRequest:
+    SuccessResponse:
       type: object
       properties:
-        deviceId:
-          type: string
-        proveId:
-          type: string
-        phoneNumber:
-          type: string
-    Error:
+        success:
+          type: boolean
+    Next:
       type: object
-      properties:
-        code:
-          type: string
-        message:
-          type: string
-        details:
-          type: array
-          items:
-            type: object
-            additionalProperties: true
+      additionalProperties:
+        type: string
+      description: Map of allowed next operations for the flow (for example `v3-challenge`, `v3-complete`).
     AuthStartRequest:
       type: object
       required:
@@ -162,23 +150,35 @@ components:
           type: string
         next:
           $ref: '#/components/schemas/Next'
-    SuccessResponse:
+    DeviceRevokeRequest:
       type: object
       properties:
-        success:
-          type: boolean
-    Next:
+        deviceId:
+          type: string
+        proveId:
+          type: string
+        phoneNumber:
+          type: string
+    Error:
       type: object
-      additionalProperties:
-        type: string
-      description: Map of allowed next operations for the flow (for example `v3-challenge`, `v3-complete`).
-  responses:
-    Unauthorized:
-      description: Missing, invalid, or expired access token.
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
+      properties:
+        code:
+          type: string
+        message:
+          type: string
+        details:
+          type: array
+          items:
+            type: object
+            additionalProperties: true
+    AuthContinueRequest:
+      type: object
+      required:
+      - authId
+      properties:
+        authId:
+          type: string
+          description: Identifier returned by auth start.
   securitySchemes:
     bearerAuth:
       type: http

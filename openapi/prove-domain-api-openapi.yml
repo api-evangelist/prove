@@ -1,7 +1,7 @@
-openapi: 3.0.1
+openapi: 3.2.0
 info:
-  title: Prove Auth Domain API
-  description: 'Phone-centric identity verification and authentication API. The Prove API (v3) uses a consumer''s mobile phone number and cryptographic possession signals to power the Pre-Fill verification flow (start, validate, challenge, complete), Unified Authentication / Trust Score (unify, unify-bind, unify-status), identity discovery (discover, fetch), phone-based Auth, and a persistent Identity Manager. All endpoints are OAuth 2.0 (client-credentials) secured; obtain a Bearer access token from the /token endpoint and send it as `Authorization: Bearer <token>` on every subsequent request.'
+  title: Prove Domain API
+  description: Phone-centric identity verification and authentication API.
   termsOfService: https://www.prove.com/legal/terms
   contact:
     name: Prove Developer Support
@@ -103,12 +103,14 @@ paths:
         '401':
           $ref: '#/components/responses/Unauthorized'
 components:
+  responses:
+    Unauthorized:
+      description: Missing, invalid, or expired access token.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
   schemas:
-    SuccessResponse:
-      type: object
-      properties:
-        success:
-          type: boolean
     Error:
       type: object
       properties:
@@ -121,13 +123,11 @@ components:
           items:
             type: object
             additionalProperties: true
-  responses:
-    Unauthorized:
-      description: Missing, invalid, or expired access token.
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
+    SuccessResponse:
+      type: object
+      properties:
+        success:
+          type: boolean
   securitySchemes:
     bearerAuth:
       type: http

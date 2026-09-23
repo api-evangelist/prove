@@ -1,7 +1,7 @@
-openapi: 3.0.1
+openapi: 3.2.0
 info:
-  title: Prove Auth Identity Verification API
-  description: 'Phone-centric identity verification and authentication API. The Prove API (v3) uses a consumer''s mobile phone number and cryptographic possession signals to power the Pre-Fill verification flow (start, validate, challenge, complete), Unified Authentication / Trust Score (unify, unify-bind, unify-status), identity discovery (discover, fetch), phone-based Auth, and a persistent Identity Manager. All endpoints are OAuth 2.0 (client-credentials) secured; obtain a Bearer access token from the /token endpoint and send it as `Authorization: Bearer <token>` on every subsequent request.'
+  title: Prove Identity Verification API
+  description: Phone-centric identity verification and authentication API.
   termsOfService: https://www.prove.com/legal/terms
   contact:
     name: Prove Developer Support
@@ -118,74 +118,6 @@ paths:
           $ref: '#/components/responses/Unauthorized'
 components:
   schemas:
-    Individual:
-      type: object
-      properties:
-        firstName:
-          type: string
-        lastName:
-          type: string
-        dob:
-          type: string
-        ssn:
-          type: string
-        emailAddresses:
-          type: array
-          items:
-            type: string
-        addresses:
-          type: array
-          items:
-            $ref: '#/components/schemas/Address'
-    V3ValidateRequest:
-      type: object
-      required:
-      - correlationId
-      properties:
-        correlationId:
-          type: string
-    Error:
-      type: object
-      properties:
-        code:
-          type: string
-        message:
-          type: string
-        details:
-          type: array
-          items:
-            type: object
-            additionalProperties: true
-    V3CompleteResponse:
-      type: object
-      properties:
-        success:
-          type: boolean
-        evaluation:
-          type: string
-          description: Overall flow evaluation result.
-        idv:
-          type: object
-          additionalProperties: true
-          description: Identity verification result and reconciled attributes.
-        kyc:
-          type: object
-          additionalProperties: true
-          description: KYC screening result.
-        next:
-          $ref: '#/components/schemas/Next'
-    V3StartResponse:
-      type: object
-      properties:
-        success:
-          type: boolean
-        correlationId:
-          type: string
-          description: Session correlation ID passed to all subsequent flow calls.
-        authToken:
-          type: string
-        next:
-          $ref: '#/components/schemas/Next'
     V3StartRequest:
       type: object
       required:
@@ -231,6 +163,30 @@ components:
           type: string
         postalCode:
           type: string
+    Next:
+      type: object
+      additionalProperties:
+        type: string
+      description: Map of allowed next operations for the flow (for example `v3-challenge`, `v3-complete`).
+    V3CompleteRequest:
+      type: object
+      required:
+      - correlationId
+      - individual
+      properties:
+        correlationId:
+          type: string
+        individual:
+          $ref: '#/components/schemas/Individual'
+    V3FlowResponse:
+      type: object
+      properties:
+        success:
+          type: boolean
+        correlationId:
+          type: string
+        next:
+          $ref: '#/components/schemas/Next'
     V3ChallengeRequest:
       type: object
       required:
@@ -244,39 +200,83 @@ components:
         ssn:
           type: string
           description: Last four of SSN.
-    V3FlowResponse:
+    V3StartResponse:
       type: object
       properties:
         success:
           type: boolean
         correlationId:
           type: string
+          description: Session correlation ID passed to all subsequent flow calls.
+        authToken:
+          type: string
         next:
           $ref: '#/components/schemas/Next'
-    V3CompleteRequest:
+    V3ValidateRequest:
       type: object
       required:
       - correlationId
-      - individual
       properties:
         correlationId:
           type: string
-        individual:
-          $ref: '#/components/schemas/Individual'
-    Next:
+    Error:
       type: object
-      additionalProperties:
-        type: string
-      description: Map of allowed next operations for the flow (for example `v3-challenge`, `v3-complete`).
+      properties:
+        code:
+          type: string
+        message:
+          type: string
+        details:
+          type: array
+          items:
+            type: object
+            additionalProperties: true
+    V3CompleteResponse:
+      type: object
+      properties:
+        success:
+          type: boolean
+        evaluation:
+          type: string
+          description: Overall flow evaluation result.
+        idv:
+          type: object
+          additionalProperties: true
+          description: Identity verification result and reconciled attributes.
+        kyc:
+          type: object
+          additionalProperties: true
+          description: KYC screening result.
+        next:
+          $ref: '#/components/schemas/Next'
+    Individual:
+      type: object
+      properties:
+        firstName:
+          type: string
+        lastName:
+          type: string
+        dob:
+          type: string
+        ssn:
+          type: string
+        emailAddresses:
+          type: array
+          items:
+            type: string
+        addresses:
+          type: array
+          items:
+            $ref: '#/components/schemas/Address'
   responses:
-    BadRequest:
-      description: The request was malformed or failed validation.
+    Unauthorized:
+      description: Missing, invalid, or expired access token.
       content:
         application/json:
           schema:
             $ref: '#/components/schemas/Error'
-    Unauthorized:
-      description: Missing, invalid, or expired access token.
+    BadRequest:
+      description: The request was malformed or failed validation.
       content:
         application/json:
           schema:
