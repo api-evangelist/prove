@@ -45,6 +45,21 @@ paths:
       security: []
 components:
   schemas:
+    TokenResponse:
+      type: object
+      properties:
+        access_token:
+          type: string
+        token_type:
+          type: string
+          example: Bearer
+        expires_in:
+          type: integer
+          description: Access token lifetime in seconds.
+        refresh_token:
+          type: string
+        refresh_expires_in:
+          type: integer
     TokenRequest:
       type: object
       required:
@@ -75,21 +90,6 @@ components:
           items:
             type: object
             additionalProperties: true
-    TokenResponse:
-      type: object
-      properties:
-        access_token:
-          type: string
-        token_type:
-          type: string
-          example: Bearer
-        expires_in:
-          type: integer
-          description: Access token lifetime in seconds.
-        refresh_token:
-          type: string
-        refresh_expires_in:
-          type: integer
   responses:
     Unauthorized:
       description: Missing, invalid, or expired access token.

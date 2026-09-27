@@ -109,56 +109,12 @@ paths:
         '401':
           $ref: '#/components/responses/Unauthorized'
 components:
-  responses:
-    Unauthorized:
-      description: Missing, invalid, or expired access token.
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
   schemas:
     SuccessResponse:
       type: object
       properties:
         success:
           type: boolean
-    Next:
-      type: object
-      additionalProperties:
-        type: string
-      description: Map of allowed next operations for the flow (for example `v3-challenge`, `v3-complete`).
-    AuthStartRequest:
-      type: object
-      required:
-      - phoneNumber
-      properties:
-        phoneNumber:
-          type: string
-        clientRequestId:
-          type: string
-        finalTargetURL:
-          type: string
-          format: uri
-    AuthResponse:
-      type: object
-      properties:
-        success:
-          type: boolean
-        authId:
-          type: string
-        evaluation:
-          type: string
-        next:
-          $ref: '#/components/schemas/Next'
-    DeviceRevokeRequest:
-      type: object
-      properties:
-        deviceId:
-          type: string
-        proveId:
-          type: string
-        phoneNumber:
-          type: string
     Error:
       type: object
       properties:
@@ -171,6 +127,18 @@ components:
           items:
             type: object
             additionalProperties: true
+    AuthStartRequest:
+      type: object
+      required:
+      - phoneNumber
+      properties:
+        phoneNumber:
+          type: string
+        clientRequestId:
+          type: string
+        finalTargetURL:
+          type: string
+          format: uri
     AuthContinueRequest:
       type: object
       required:
@@ -179,6 +147,38 @@ components:
         authId:
           type: string
           description: Identifier returned by auth start.
+    DeviceRevokeRequest:
+      type: object
+      properties:
+        deviceId:
+          type: string
+        proveId:
+          type: string
+        phoneNumber:
+          type: string
+    Next:
+      type: object
+      additionalProperties:
+        type: string
+      description: Map of allowed next operations for the flow (for example `v3-challenge`, `v3-complete`).
+    AuthResponse:
+      type: object
+      properties:
+        success:
+          type: boolean
+        authId:
+          type: string
+        evaluation:
+          type: string
+        next:
+          $ref: '#/components/schemas/Next'
+  responses:
+    Unauthorized:
+      description: Missing, invalid, or expired access token.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
   securitySchemes:
     bearerAuth:
       type: http

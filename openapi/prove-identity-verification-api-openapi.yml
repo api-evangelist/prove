@@ -118,6 +118,72 @@ paths:
           $ref: '#/components/responses/Unauthorized'
 components:
   schemas:
+    V3ChallengeRequest:
+      type: object
+      required:
+      - correlationId
+      properties:
+        correlationId:
+          type: string
+        dob:
+          type: string
+          description: Date of birth (YYYY-MM-DD).
+        ssn:
+          type: string
+          description: Last four of SSN.
+    Error:
+      type: object
+      properties:
+        code:
+          type: string
+        message:
+          type: string
+        details:
+          type: array
+          items:
+            type: object
+            additionalProperties: true
+    V3CompleteResponse:
+      type: object
+      properties:
+        success:
+          type: boolean
+        evaluation:
+          type: string
+          description: Overall flow evaluation result.
+        idv:
+          type: object
+          additionalProperties: true
+          description: Identity verification result and reconciled attributes.
+        kyc:
+          type: object
+          additionalProperties: true
+          description: KYC screening result.
+        next:
+          $ref: '#/components/schemas/Next'
+    Address:
+      type: object
+      properties:
+        address:
+          type: string
+        city:
+          type: string
+        region:
+          type: string
+        postalCode:
+          type: string
+    V3StartResponse:
+      type: object
+      properties:
+        success:
+          type: boolean
+        correlationId:
+          type: string
+          description: Session correlation ID passed to all subsequent flow calls.
+        authToken:
+          type: string
+        next:
+          $ref: '#/components/schemas/Next'
     V3StartRequest:
       type: object
       required:
@@ -152,22 +218,6 @@ components:
           description: Full or last-four SSN.
         allowOTPRetry:
           type: boolean
-    Address:
-      type: object
-      properties:
-        address:
-          type: string
-        city:
-          type: string
-        region:
-          type: string
-        postalCode:
-          type: string
-    Next:
-      type: object
-      additionalProperties:
-        type: string
-      description: Map of allowed next operations for the flow (for example `v3-challenge`, `v3-complete`).
     V3CompleteRequest:
       type: object
       required:
@@ -178,40 +228,11 @@ components:
           type: string
         individual:
           $ref: '#/components/schemas/Individual'
-    V3FlowResponse:
+    Next:
       type: object
-      properties:
-        success:
-          type: boolean
-        correlationId:
-          type: string
-        next:
-          $ref: '#/components/schemas/Next'
-    V3ChallengeRequest:
-      type: object
-      required:
-      - correlationId
-      properties:
-        correlationId:
-          type: string
-        dob:
-          type: string
-          description: Date of birth (YYYY-MM-DD).
-        ssn:
-          type: string
-          description: Last four of SSN.
-    V3StartResponse:
-      type: object
-      properties:
-        success:
-          type: boolean
-        correlationId:
-          type: string
-          description: Session correlation ID passed to all subsequent flow calls.
-        authToken:
-          type: string
-        next:
-          $ref: '#/components/schemas/Next'
+      additionalProperties:
+        type: string
+      description: Map of allowed next operations for the flow (for example `v3-challenge`, `v3-complete`).
     V3ValidateRequest:
       type: object
       required:
@@ -219,36 +240,6 @@ components:
       properties:
         correlationId:
           type: string
-    Error:
-      type: object
-      properties:
-        code:
-          type: string
-        message:
-          type: string
-        details:
-          type: array
-          items:
-            type: object
-            additionalProperties: true
-    V3CompleteResponse:
-      type: object
-      properties:
-        success:
-          type: boolean
-        evaluation:
-          type: string
-          description: Overall flow evaluation result.
-        idv:
-          type: object
-          additionalProperties: true
-          description: Identity verification result and reconciled attributes.
-        kyc:
-          type: object
-          additionalProperties: true
-          description: KYC screening result.
-        next:
-          $ref: '#/components/schemas/Next'
     Individual:
       type: object
       properties:
@@ -268,15 +259,24 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/Address'
+    V3FlowResponse:
+      type: object
+      properties:
+        success:
+          type: boolean
+        correlationId:
+          type: string
+        next:
+          $ref: '#/components/schemas/Next'
   responses:
-    Unauthorized:
-      description: Missing, invalid, or expired access token.
+    BadRequest:
+      description: The request was malformed or failed validation.
       content:
         application/json:
           schema:
             $ref: '#/components/schemas/Error'
-    BadRequest:
-      description: The request was malformed or failed validation.
+    Unauthorized:
+      description: Missing, invalid, or expired access token.
       content:
         application/json:
           schema:

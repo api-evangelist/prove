@@ -187,31 +187,7 @@ paths:
         '401':
           $ref: '#/components/responses/Unauthorized'
 components:
-  responses:
-    Unauthorized:
-      description: Missing, invalid, or expired access token.
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
-    NotFound:
-      description: The requested resource was not found.
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
-    BadRequest:
-      description: The request was malformed or failed validation.
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
   schemas:
-    SuccessResponse:
-      type: object
-      properties:
-        success:
-          type: boolean
     Identity:
       type: object
       properties:
@@ -226,16 +202,11 @@ components:
         identityAttributes:
           type: object
           additionalProperties: true
-    IdentityListResponse:
+    SuccessResponse:
       type: object
       properties:
-        identities:
-          type: array
-          items:
-            $ref: '#/components/schemas/Identity'
-        lastKey:
-          type: string
-          description: Pagination token; pass as startKey for the next page.
+        success:
+          type: boolean
     EnrollIdentityRequest:
       type: object
       required:
@@ -267,6 +238,35 @@ components:
           items:
             type: object
             additionalProperties: true
+    IdentityListResponse:
+      type: object
+      properties:
+        identities:
+          type: array
+          items:
+            $ref: '#/components/schemas/Identity'
+        lastKey:
+          type: string
+          description: Pagination token; pass as startKey for the next page.
+  responses:
+    BadRequest:
+      description: The request was malformed or failed validation.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    NotFound:
+      description: The requested resource was not found.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    Unauthorized:
+      description: Missing, invalid, or expired access token.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
   securitySchemes:
     bearerAuth:
       type: http
