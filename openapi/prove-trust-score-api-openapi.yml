@@ -94,18 +94,6 @@ paths:
           $ref: '#/components/responses/Unauthorized'
 components:
   schemas:
-    Error:
-      type: object
-      properties:
-        code:
-          type: string
-        message:
-          type: string
-        details:
-          type: array
-          items:
-            type: object
-            additionalProperties: true
     V3UnifyStatusResponse:
       type: object
       properties:
@@ -165,6 +153,18 @@ components:
         correlationId:
           type: string
           pattern: ^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$
+    Error:
+      type: object
+      properties:
+        code:
+          type: string
+        message:
+          type: string
+        details:
+          type: array
+          items:
+            type: object
+            additionalProperties: true
     Next:
       type: object
       additionalProperties:
@@ -180,14 +180,14 @@ components:
         next:
           $ref: '#/components/schemas/Next'
   responses:
-    BadRequest:
-      description: The request was malformed or failed validation.
+    Unauthorized:
+      description: Missing, invalid, or expired access token.
       content:
         application/json:
           schema:
             $ref: '#/components/schemas/Error'
-    Unauthorized:
-      description: Missing, invalid, or expired access token.
+    BadRequest:
+      description: The request was malformed or failed validation.
       content:
         application/json:
           schema:
