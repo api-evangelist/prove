@@ -200,6 +200,9 @@ apis:
   - type: Documentation
     url: https://developer.prove.com/reference/prefill-identity-server
 common:
+- type: CapabilityMap
+  url: capabilities/prove-capability-edges.yml
+  name: Prove Business Capability Map
 - type: AgenticAccess
   url: agentic-access/prove-agentic-access.yml
 - type: DomainSecurity
