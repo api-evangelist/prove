@@ -44,22 +44,14 @@ paths:
           $ref: '#/components/responses/Unauthorized'
       security: []
 components:
+  responses:
+    Unauthorized:
+      description: Missing, invalid, or expired access token.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
   schemas:
-    TokenResponse:
-      type: object
-      properties:
-        access_token:
-          type: string
-        token_type:
-          type: string
-          example: Bearer
-        expires_in:
-          type: integer
-          description: Access token lifetime in seconds.
-        refresh_token:
-          type: string
-        refresh_expires_in:
-          type: integer
     TokenRequest:
       type: object
       required:
@@ -78,6 +70,21 @@ components:
         client_secret:
           type: string
           description: Prove-issued client secret.
+    TokenResponse:
+      type: object
+      properties:
+        access_token:
+          type: string
+        token_type:
+          type: string
+          example: Bearer
+        expires_in:
+          type: integer
+          description: Access token lifetime in seconds.
+        refresh_token:
+          type: string
+        refresh_expires_in:
+          type: integer
     Error:
       type: object
       properties:
@@ -90,13 +97,6 @@ components:
           items:
             type: object
             additionalProperties: true
-  responses:
-    Unauthorized:
-      description: Missing, invalid, or expired access token.
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
   securitySchemes:
     bearerAuth:
       type: http

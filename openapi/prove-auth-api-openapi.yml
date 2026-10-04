@@ -109,14 +109,24 @@ paths:
         '401':
           $ref: '#/components/responses/Unauthorized'
 components:
-  responses:
-    Unauthorized:
-      description: Missing, invalid, or expired access token.
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
   schemas:
+    SuccessResponse:
+      type: object
+      properties:
+        success:
+          type: boolean
+    AuthStartRequest:
+      type: object
+      required:
+      - phoneNumber
+      properties:
+        phoneNumber:
+          type: string
+        clientRequestId:
+          type: string
+        finalTargetURL:
+          type: string
+          format: uri
     DeviceRevokeRequest:
       type: object
       properties:
@@ -134,30 +144,6 @@ components:
         authId:
           type: string
           description: Identifier returned by auth start.
-    AuthStartRequest:
-      type: object
-      required:
-      - phoneNumber
-      properties:
-        phoneNumber:
-          type: string
-        clientRequestId:
-          type: string
-        finalTargetURL:
-          type: string
-          format: uri
-    Error:
-      type: object
-      properties:
-        code:
-          type: string
-        message:
-          type: string
-        details:
-          type: array
-          items:
-            type: object
-            additionalProperties: true
     AuthResponse:
       type: object
       properties:
@@ -174,11 +160,25 @@ components:
       additionalProperties:
         type: string
       description: Map of allowed next operations for the flow (for example `v3-challenge`, `v3-complete`).
-    SuccessResponse:
+    Error:
       type: object
       properties:
-        success:
-          type: boolean
+        code:
+          type: string
+        message:
+          type: string
+        details:
+          type: array
+          items:
+            type: object
+            additionalProperties: true
+  responses:
+    Unauthorized:
+      description: Missing, invalid, or expired access token.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
   securitySchemes:
     bearerAuth:
       type: http
