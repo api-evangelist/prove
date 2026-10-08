@@ -2,11 +2,13 @@ aid: prove
 url: https://raw.githubusercontent.com/api-evangelist/prove/refs/heads/main/apis.yml
 name: Prove
 kind: company
-description: Prove is a phone-centric digital identity verification and authentication
-  platform. The Prove API (v3) uses the consumer's mobile phone number and cryptographic
-  possession signals to power Pre-Fill identity prefill, passive Trust Score
-  verification, Unified Authentication, and an Identity Manager - all behind an
-  OAuth 2.0 secured REST interface at https://api.prove.com/v3.
+description: Prove is a phone-centric digital identity verification and authentication platform. The Prove
+  API (v3) uses the consumer's mobile phone number and cryptographic possession signals to power Pre-Fill
+  identity prefill, passive Trust Score verification, Unified Authentication, phone-based Auth and a persistent
+  Identity Manager - all behind an OAuth 2.0 client-credentials REST interface served from regional hosts
+  (https://platform.proveapis.com/v3 for the US, https://platform.eu.proveapis.com/v3 for the EU, with
+  UAT sandboxes for each). Official server SDKs ship for TypeScript, Go, Java and .NET, plus web and mobile
+  Auth client SDKs and a public Postman workspace.
 deliveryModel:
   model: saas
   open_source: false
@@ -40,14 +42,101 @@ tags:
 - KYC
 - Fraud Prevention
 created: '2026-06-21'
-modified: '2026-06-21'
+modified: '2026-10-08'
 specificationVersion: '0.23'
+maintainers:
+- FN: Kin Lane
+  email: kin@apievangelist.com
+common:
+- type: Plans
+  url: plans/prove-plans-pricing.yml
+- type: RateLimits
+  url: rate-limits/prove-rate-limits.yml
+- type: SecurityTxt
+  url: well-known/prove-status-security.txt
+- type: Spectral
+  url: rules/prove-rules.yml
+- type: JSONLD
+  url: json-ld/prove-context.jsonld
+- type: Vocabulary
+  url: vocabulary/prove-vocabulary.yml
+- type: AgentSkill
+  url: skills/_index.yml
+- type: DataModel
+  url: data-model/prove-data-model.yml
+- type: Conventions
+  url: conventions/prove-conventions.yml
+- type: Sandbox
+  url: sandbox/prove-sandbox.yml
+- type: TrustCenter
+  url: security/prove-trust-center.yml
+- type: StatusPage
+  url: https://status.prove.com/
+- type: Lifecycle
+  url: lifecycle/prove-lifecycle.yml
+- type: ErrorCatalog
+  url: errors/prove-problem-types.yml
+- type: Conformance
+  url: conformance/prove-conformance.yml
+- type: Overlay
+  url: overlays/prove-auth-api-overlay.yaml
+- type: LLMsTxt
+  url: llms/prove-llms.txt
+- type: ToolCrosswalk
+  url: mcp/prove-tool-crosswalk.yml
+- type: MCPServer
+  url: mcp/prove-mcp.yml
+- type: WellKnown
+  url: well-known/prove-well-known.yml
+- type: Hosts
+  url: hosts/prove-hosts.yml
+- type: Vendors
+  url: vendors/prove-vendors.yml
+- type: SDKs
+  url: packages/prove-packages.yml
+- type: Packages
+  url: packages/prove-packages.yml
+- type: Leadership
+  url: https://www.prove.com/leadership
+- type: CapabilityMap
+  url: capabilities/prove-capability-edges.yml
+  name: Prove Business Capability Map
+- type: AgenticAccess
+  url: agentic-access/prove-agentic-access.yml
+- type: DomainSecurity
+  url: security/prove-domain-security.yml
+- type: Authentication
+  url: authentication/prove-authentication.yml
+- type: GitHubOrganization
+  url: https://github.com/prove-identity
+- type: LinkedIn
+  url: https://www.linkedin.com/company/proveidentity
+- type: Website
+  url: https://www.prove.com
+- type: Documentation
+  url: https://developer.prove.com
+- type: FinOps
+  url: finops/prove-finops.yml
+- url: https://www.prove.com/blog
+  type: Blog
+- type: DeveloperPortal
+  url: https://developer.prove.com
+- type: Support
+  url: https://support.prove.com/s/
+- type: TermsOfService
+  url: https://www.prove.com/legal/prove-terms-of-service
+- type: PrivacyPolicy
+  url: https://www.prove.com/legal/overview
+- type: Postman
+  url: https://www.postman.com/prove-eng/prove-link-api-testing/collection/93r30p4/prove-api
+- type: SignUp
+  url: https://portal.prove.com/en/signup
 apis:
 - aid: prove:prove-auth-api
   name: Prove Auth API
   description: Phone-based authentication and device binding.
   humanURL: https://developer.prove.com/docs/prove-pre-fill-flow
-  baseURL: https://api.prove.com/v3
+  baseURL: https://platform.proveapis.com/v3
   tags:
   - Authentication
   tags_raw:
@@ -67,11 +156,21 @@ apis:
     url: https://developer.prove.com/reference/unify-server
   - type: Documentation
     url: https://developer.prove.com/reference/prefill-identity-server
+  - type: JSONSchema
+    url: json-schema/prove-auth-start-request-schema.json
+  - type: JSONSchema
+    url: json-schema/prove-auth-response-schema.json
+  - type: JSONSchema
+    url: json-schema/prove-auth-continue-request-schema.json
+  - type: JSONSchema
+    url: json-schema/prove-device-revoke-request-schema.json
+  - type: JSONSchema
+    url: json-schema/prove-success-response-schema.json
 - aid: prove:prove-authentication-api
   name: Prove Authentication API
   description: OAuth 2.0 token issuance.
   humanURL: https://developer.prove.com/docs/prove-pre-fill-flow
-  baseURL: https://api.prove.com/v3
+  baseURL: https://platform.proveapis.com/v3
   tags:
   - Authentication
   properties:
@@ -89,11 +188,15 @@ apis:
     url: https://developer.prove.com/reference/unify-server
   - type: Documentation
     url: https://developer.prove.com/reference/prefill-identity-server
+  - type: JSONSchema
+    url: json-schema/prove-token-request-schema.json
+  - type: JSONSchema
+    url: json-schema/prove-token-response-schema.json
 - aid: prove:prove-domain-api
   name: Prove Domain API
   description: Cross-domain linking of identity scopes.
   humanURL: https://developer.prove.com/docs/prove-pre-fill-flow
-  baseURL: https://api.prove.com/v3
+  baseURL: https://platform.proveapis.com/v3
   tags:
   - Domain
   properties:
@@ -111,11 +214,13 @@ apis:
     url: https://developer.prove.com/reference/unify-server
   - type: Documentation
     url: https://developer.prove.com/reference/prefill-identity-server
+  - type: JSONSchema
+    url: json-schema/prove-success-response-schema.json
 - aid: prove:prove-identity-api
   name: Prove Identity API
   description: Persistent identity lifecycle management.
   humanURL: https://developer.prove.com/docs/prove-pre-fill-flow
-  baseURL: https://api.prove.com/v3
+  baseURL: https://platform.proveapis.com/v3
   tags:
   - Identity
   properties:
@@ -133,11 +238,19 @@ apis:
     url: https://developer.prove.com/reference/unify-server
   - type: Documentation
     url: https://developer.prove.com/reference/prefill-identity-server
+  - type: JSONSchema
+    url: json-schema/prove-enroll-identity-request-schema.json
+  - type: JSONSchema
+    url: json-schema/prove-identity-schema.json
+  - type: JSONSchema
+    url: json-schema/prove-identity-list-response-schema.json
+  - type: JSONSchema
+    url: json-schema/prove-success-response-schema.json
 - aid: prove:prove-identity-verification-api
   name: Prove Identity Verification API
   description: Ordered Pre-Fill verification flow - start, validate, challenge, complete.
   humanURL: https://developer.prove.com/docs/prove-pre-fill-flow
-  baseURL: https://api.prove.com/v3
+  baseURL: https://platform.proveapis.com/v3
   tags:
   - Identity Verification
   properties:
@@ -155,11 +268,23 @@ apis:
     url: https://developer.prove.com/reference/unify-server
   - type: Documentation
     url: https://developer.prove.com/reference/prefill-identity-server
+  - type: JSONSchema
+    url: json-schema/prove-v3-start-request-schema.json
+  - type: JSONSchema
+    url: json-schema/prove-v3-complete-response-schema.json
+  - type: JSONSchema
+    url: json-schema/prove-v3-start-response-schema.json
+  - type: JSONSchema
+    url: json-schema/prove-v3-challenge-request-schema.json
+  - type: JSONSchema
+    url: json-schema/prove-v3-complete-request-schema.json
+  - type: JSONSchema
+    url: json-schema/prove-v3-flow-response-schema.json
 - aid: prove:prove-pre-fill-api
   name: Prove Pre-Fill API
   description: Identity discovery and verified attribute retrieval.
   humanURL: https://developer.prove.com/docs/prove-pre-fill-flow
-  baseURL: https://api.prove.com/v3
+  baseURL: https://platform.proveapis.com/v3
   tags:
   - Pre-Fill
   properties:
@@ -177,11 +302,15 @@ apis:
     url: https://developer.prove.com/reference/unify-server
   - type: Documentation
     url: https://developer.prove.com/reference/prefill-identity-server
+  - type: JSONSchema
+    url: json-schema/prove-discover-response-schema.json
+  - type: JSONSchema
+    url: json-schema/prove-fetch-response-schema.json
 - aid: prove:prove-trust-score-api
   name: Prove Trust Score API
   description: Unified Authentication possession and trust evaluation.
   humanURL: https://developer.prove.com/docs/prove-pre-fill-flow
-  baseURL: https://api.prove.com/v3
+  baseURL: https://platform.proveapis.com/v3
   tags:
   - Trust Score
   properties:
@@ -199,34 +328,16 @@ apis:
     url: https://developer.prove.com/reference/unify-server
   - type: Documentation
     url: https://developer.prove.com/reference/prefill-identity-server
-common:
-- type: CapabilityMap
-  url: capabilities/prove-capability-edges.yml
-  name: Prove Business Capability Map
-- type: AgenticAccess
-  url: agentic-access/prove-agentic-access.yml
-- type: DomainSecurity
-  url: security/prove-domain-security.yml
-- type: Authentication
-  url: authentication/prove-authentication.yml
-- type: OAuthScopes
-  url: scopes/prove-scopes.yml
-- type: GitHubOrganization
-  url: https://github.com/prove-identity
-- type: LinkedIn
-  url: https://www.linkedin.com/company/proveidentity
-- type: Website
-  url: https://www.prove.com
-- type: Documentation
-  url: https://developer.prove.com
-- type: Plans
-  url: plans/prove-plans-pricing.yml
-- type: RateLimits
-  url: rate-limits/prove-rate-limits.yml
-- type: FinOps
-  url: finops/prove-finops.yml
-- url: https://www.prove.com/blog
-  type: Blog
-maintainers:
-- FN: Kin Lane
-  email: kin@apievangelist.com
+  - type: JSONSchema
+    url: json-schema/prove-v3-unify-request-schema.json
+  - type: JSONSchema
+    url: json-schema/prove-v3-unify-status-response-schema.json
+  - type: JSONSchema
+    url: json-schema/prove-v3-correlation-request-schema.json
+  - type: JSONSchema
+    url: json-schema/prove-v3-flow-response-schema.json
+x-enrichment:
+  date: '2026-10-08'
+  status: enriched
+  artifacts_added: 57
+  pass: local-v5
