@@ -1,0 +1,28 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://raw.githubusercontent.com/api-evangelist/prove/main/json-schema/prove-token-response-schema.json",
+  "title": "TokenResponse",
+  "x-generated": "2026-10-08",
+  "x-method": "derived",
+  "x-generator": "derive-json-schema.py",
+  "x-source": "openapi/prove-authentication-api-openapi.yml#/components/schemas/TokenResponse",
+  "type": "object",
+  "properties": {
+    "access_token": {
+      "type": "string"
+    },
+    "token_type": {
+      "type": "string"
+    },
+    "expires_in": {
+      "type": "integer",
+      "description": "Access token lifetime in seconds."
+    },
+    "refresh_token": {
+      "type": "string"
+    },
+    "refresh_expires_in": {
+      "type": "integer"
+    }
+  }
+}

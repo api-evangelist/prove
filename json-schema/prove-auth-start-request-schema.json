@@ -1,0 +1,25 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://raw.githubusercontent.com/api-evangelist/prove/main/json-schema/prove-auth-start-request-schema.json",
+  "title": "AuthStartRequest",
+  "x-generated": "2026-10-08",
+  "x-method": "derived",
+  "x-generator": "derive-json-schema.py",
+  "x-source": "openapi/prove-auth-api-openapi.yml#/components/schemas/AuthStartRequest",
+  "type": "object",
+  "required": [
+    "phoneNumber"
+  ],
+  "properties": {
+    "phoneNumber": {
+      "type": "string"
+    },
+    "clientRequestId": {
+      "type": "string"
+    },
+    "finalTargetURL": {
+      "type": "string",
+      "format": "uri"
+    }
+  }
+}

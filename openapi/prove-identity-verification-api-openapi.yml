@@ -118,18 +118,6 @@ paths:
           $ref: '#/components/responses/Unauthorized'
 components:
   schemas:
-    V3StartResponse:
-      type: object
-      properties:
-        success:
-          type: boolean
-        correlationId:
-          type: string
-          description: Session correlation ID passed to all subsequent flow calls.
-        authToken:
-          type: string
-        next:
-          $ref: '#/components/schemas/Next'
     V3StartRequest:
       type: object
       required:
@@ -182,6 +170,11 @@ components:
           description: KYC screening result.
         next:
           $ref: '#/components/schemas/Next'
+    Next:
+      type: object
+      additionalProperties:
+        type: string
+      description: Map of allowed next operations for the flow (for example `v3-challenge`, `v3-complete`).
     V3ValidateRequest:
       type: object
       required:
@@ -189,6 +182,48 @@ components:
       properties:
         correlationId:
           type: string
+    V3StartResponse:
+      type: object
+      properties:
+        success:
+          type: boolean
+        correlationId:
+          type: string
+          description: Session correlation ID passed to all subsequent flow calls.
+        authToken:
+          type: string
+        next:
+          $ref: '#/components/schemas/Next'
+    Address:
+      type: object
+      properties:
+        address:
+          type: string
+        city:
+          type: string
+        region:
+          type: string
+        postalCode:
+          type: string
+    V3CompleteRequest:
+      type: object
+      required:
+      - correlationId
+      - individual
+      properties:
+        correlationId:
+          type: string
+        individual:
+          $ref: '#/components/schemas/Individual'
+    V3FlowResponse:
+      type: object
+      properties:
+        success:
+          type: boolean
+        correlationId:
+          type: string
+        next:
+          $ref: '#/components/schemas/Next'
     Individual:
       type: object
       properties:
@@ -208,16 +243,18 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/Address'
-    V3CompleteRequest:
+    Error:
       type: object
-      required:
-      - correlationId
-      - individual
       properties:
-        correlationId:
+        code:
           type: string
-        individual:
-          $ref: '#/components/schemas/Individual'
+        message:
+          type: string
+        details:
+          type: array
+          items:
+            type: object
+            additionalProperties: true
     V3ChallengeRequest:
       type: object
       required:
@@ -231,52 +268,15 @@ components:
         ssn:
           type: string
           description: Last four of SSN.
-    Error:
-      type: object
-      properties:
-        code:
-          type: string
-        message:
-          type: string
-        details:
-          type: array
-          items:
-            type: object
-            additionalProperties: true
-    Address:
-      type: object
-      properties:
-        address:
-          type: string
-        city:
-          type: string
-        region:
-          type: string
-        postalCode:
-          type: string
-    Next:
-      type: object
-      additionalProperties:
-        type: string
-      description: Map of allowed next operations for the flow (for example `v3-challenge`, `v3-complete`).
-    V3FlowResponse:
-      type: object
-      properties:
-        success:
-          type: boolean
-        correlationId:
-          type: string
-        next:
-          $ref: '#/components/schemas/Next'
   responses:
-    BadRequest:
-      description: The request was malformed or failed validation.
+    Unauthorized:
+      description: Missing, invalid, or expired access token.
       content:
         application/json:
           schema:
             $ref: '#/components/schemas/Error'
-    Unauthorized:
-      description: Missing, invalid, or expired access token.
+    BadRequest:
+      description: The request was malformed or failed validation.
       content:
         application/json:
           schema:

@@ -1,0 +1,107 @@
+generated: '2026-10-08'
+method: searched
+source:
+- openapi/_original/prove-openapi.yml
+- https://raw.githubusercontent.com/prove-identity/prove-sdk-server-typescript/main/README.md
+- https://raw.githubusercontent.com/prove-identity/prove-postman/main/README.md
+description: Cross-cutting behaviour of the Prove v3 API as the contract and the provider's own SDK/Postman READMEs
+  state it. The developer portal is login-gated, so anything only documented there is recorded as not found rather
+  than guessed.
+base_urls:
+  prod-us: https://platform.proveapis.com/v3
+  prod-eu: https://platform.eu.proveapis.com/v3
+  uat-us: https://platform.uat.proveapis.com/v3
+  uat-eu: https://platform.uat.eu.proveapis.com/v3
+  note: api.prove.com (first server in the harvested contract and the apis.yml baseURL before this pass) does not
+    resolve in DNS (2026-10-08); the SDK README server table is the published list.
+api_style: REST over HTTPS, JSON request and response bodies; stateful ordered flows correlated by correlationId
+authentication:
+  scheme: OAuth 2.0 client credentials -> bearer token
+  token_endpoint: POST /v3/token (v3TokenRequest)
+  token_response:
+  - access_token
+  - token_type
+  - expires_in
+  - refresh_token
+  - refresh_expires_in
+  global_security: bearerAuth on every operation except /token
+  credentials: Client ID + Client Secret per Portal project
+  detail: authentication/prove-authentication.yml
+idempotency:
+  coverage: none
+  mechanism: null
+  header: null
+  retention: null
+  docs: null
+  notes: 'No Idempotency-Key or equivalent replay-protection header appears in the contract or the SDK/Postman documentation.
+    clientRequestId (optional on unify, enroll and auth start) is a client correlation value and is not documented
+    as deduplicating writes. Flow steps are protected only by sequencing: each response returns a `next` map naming
+    the calls allowed next.'
+reversibility:
+  status: documented
+  summary: Three write surfaces have an inverse operation in the contract; none states a time window, so this is
+    a documented (not verified) reversal path.
+  pairs:
+  - write: v3EnrollIdentity
+    reversal: v3DisenrollIdentity
+    path: DELETE /v3/identity/{proveId}
+    window: null
+    docs: null
+    note: Disenroll removes an enrolled identity; no retention or undo window is stated.
+  - write: authFinishRequest / v3UnifyBindRequest (device binding)
+    reversal: v3DeviceRevokeRequest
+    path: POST /v3/device/revoke
+    window: null
+    docs: null
+    note: Revokes a bound device by deviceId / proveId / phoneNumber; no window stated.
+  - write: v3DomainLinkRequest + v3DomainConfirmLinkRequest
+    reversal: v3DomainUnlinkRequest
+    path: POST /v3/domain/unlink
+    window: null
+    docs: null
+  non_reversible:
+  - Pre-Fill verification flow (v3StartRequest -> v3ValidateRequest -> v3ChallengeRequest -> v3CompleteRequest)
+    is an assessment; there is no cancel or undo operation.
+  - Unified Authentication evaluations (v3UnifyRequest / v3UnifyStatusRequest) and phone Auth (authStartRequest
+    / authContinueRequest / authFinishRequest) have no reversal beyond device revoke.
+  dry_run_mode: none documented; UAT environments stand in for rehearsal
+pagination:
+  style: cursor
+  request_params:
+    startKey: query parameter on GET /v3/identity (v3BatchGetIdentities)
+  response_fields:
+    identities: array of Identity
+    lastKey: cursor to pass as startKey for the next page (absent on the last page)
+  scope: Only the Identity Manager batch read paginates; flow operations return single objects.
+flow_state:
+  mechanism: Every flow response carries `next`, a map of the operations permitted next, and `correlationId`, which
+    the client echoes on each subsequent step.
+  docs: 'https://raw.githubusercontent.com/prove-identity/prove-postman/main/README.md (Pre-Fill Flow: start, validate,
+    challenge, complete "should be called in order")'
+request_tracing:
+  correlation_id: correlationId issued by /v3/start and /v3/unify and required on validate, challenge, complete,
+    unify-bind, unify-status
+  client_request_id: clientRequestId optional on unify, identity enroll, auth start
+  response_header: null
+versioning:
+  scheme: url-path
+  current: v3
+  detail: lifecycle/prove-lifecycle.yml
+error_envelope:
+  media_type: application/json
+  rfc9457: false
+  shape: '{ "code", "message", "details" } (components.schemas.Error)'
+  statuses_declared:
+  - '400'
+  - '401'
+  - '404'
+  sdk_classes: ProveapiError base; Error404 applies to 3 of 29 SDK methods (TypeScript README)
+  detail: errors/prove-problem-types.yml
+rate_limit_signaling:
+  documented: false
+  headers: null
+  status_on_exhaustion: null
+  notes: No 429 response, RateLimit-* or Retry-After header appears in the contract or READMEs. The SDK ships client-side
+    retry configuration (README "Retries") but that is SDK behaviour, not an API signal.
+field_expansion: null
+metadata: null

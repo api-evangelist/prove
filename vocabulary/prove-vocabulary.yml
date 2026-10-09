@@ -1,0 +1,177 @@
+generated: '2026-10-08'
+method: derived
+generator: derive-vocabulary.py
+source:
+- openapi/prove-auth-api-openapi.yml
+- openapi/prove-authentication-api-openapi.yml
+- openapi/prove-domain-api-openapi.yml
+- openapi/prove-identity-api-openapi.yml
+- openapi/prove-identity-verification-api-openapi.yml
+vocabulary:
+  name: Prove Domain Vocabulary
+  description: 'Terms declared by Prove''s own API contract: its resource groups, objects and enumerations, with the contract''s definitions.
+    Derived, not authored.'
+  version: '2026-10-08'
+  terms:
+  - term: Auth
+    definition: Phone-based authentication and device binding.
+    tags:
+    - Resource Group
+    source: openapi/prove-auth-api-openapi.yml
+  - term: Authentication
+    definition: OAuth 2.0 token issuance.
+    tags:
+    - Resource Group
+    source: openapi/prove-authentication-api-openapi.yml
+  - term: Domain
+    definition: Cross-domain linking of identity scopes.
+    tags:
+    - Resource Group
+    source: openapi/prove-domain-api-openapi.yml
+  - term: Identity
+    definition: Persistent identity lifecycle management.
+    tags:
+    - Resource Group
+    source: openapi/prove-identity-api-openapi.yml
+  - term: Identity Verification
+    definition: Ordered Pre-Fill verification flow - start, validate, challenge, complete.
+    tags:
+    - Resource Group
+    source: openapi/prove-identity-verification-api-openapi.yml
+  - term: Pre Fill
+    definition: Identity discovery and verified attribute retrieval.
+    tags:
+    - Resource Group
+    source: openapi/prove-pre-fill-api-openapi.yml
+  - term: Trust Score
+    definition: Unified Authentication possession and trust evaluation.
+    tags:
+    - Resource Group
+    source: openapi/prove-trust-score-api-openapi.yml
+  - term: DeviceRevokeRequest
+    definition: 'Object declared by the contract with fields: deviceId, proveId, phoneNumber.'
+    tags:
+    - Object
+    source: openapi/prove-auth-api-openapi.yml#/components/schemas/DeviceRevokeRequest
+  - term: AuthContinueRequest
+    definition: 'Object declared by the contract with fields: authId.'
+    tags:
+    - Object
+    source: openapi/prove-auth-api-openapi.yml#/components/schemas/AuthContinueRequest
+  - term: AuthStartRequest
+    definition: 'Object declared by the contract with fields: phoneNumber, clientRequestId, finalTargetURL.'
+    tags:
+    - Object
+    source: openapi/prove-auth-api-openapi.yml#/components/schemas/AuthStartRequest
+  - term: Error
+    definition: 'Object declared by the contract with fields: code, message, details.'
+    tags:
+    - Object
+    source: openapi/prove-auth-api-openapi.yml#/components/schemas/Error
+  - term: AuthResponse
+    definition: 'Object declared by the contract with fields: success, authId, evaluation, next.'
+    tags:
+    - Object
+    source: openapi/prove-auth-api-openapi.yml#/components/schemas/AuthResponse
+  - term: Next
+    definition: Map of allowed next operations for the flow (for example `v3-challenge`, `v3-complete`).
+    tags:
+    - Object
+    source: openapi/prove-auth-api-openapi.yml#/components/schemas/Next
+  - term: SuccessResponse
+    definition: 'Object declared by the contract with fields: success.'
+    tags:
+    - Object
+    source: openapi/prove-auth-api-openapi.yml#/components/schemas/SuccessResponse
+  - term: TokenResponse
+    definition: 'Object declared by the contract with fields: access_token, token_type, expires_in, refresh_token, refresh_expires_in.'
+    tags:
+    - Object
+    source: openapi/prove-authentication-api-openapi.yml#/components/schemas/TokenResponse
+  - term: TokenRequest
+    definition: 'Object declared by the contract with fields: grant_type, client_id, client_secret.'
+    tags:
+    - Object
+    source: openapi/prove-authentication-api-openapi.yml#/components/schemas/TokenRequest
+  - term: IdentityListResponse
+    definition: 'Object declared by the contract with fields: identities, lastKey.'
+    tags:
+    - Object
+    source: openapi/prove-identity-api-openapi.yml#/components/schemas/IdentityListResponse
+  - term: EnrollIdentityRequest
+    definition: 'Object declared by the contract with fields: phoneNumber, clientCustomerId, clientHumanId, clientRequestId, deviceId, identityAttributes.'
+    tags:
+    - Object
+    source: openapi/prove-identity-api-openapi.yml#/components/schemas/EnrollIdentityRequest
+  - term: V3StartResponse
+    definition: 'Object declared by the contract with fields: success, correlationId, authToken, next.'
+    tags:
+    - Object
+    source: openapi/prove-identity-verification-api-openapi.yml#/components/schemas/V3StartResponse
+  - term: V3StartRequest
+    definition: 'Object declared by the contract with fields: flowType, phoneNumber, finalTargetURL, emailAddress, smsMessage, ipAddress, dob,
+      ssn, allowOTPRetry.'
+    tags:
+    - Object
+    source: openapi/prove-identity-verification-api-openapi.yml#/components/schemas/V3StartRequest
+  - term: V3CompleteResponse
+    definition: 'Object declared by the contract with fields: success, evaluation, idv, kyc, next.'
+    tags:
+    - Object
+    source: openapi/prove-identity-verification-api-openapi.yml#/components/schemas/V3CompleteResponse
+  - term: V3ValidateRequest
+    definition: 'Object declared by the contract with fields: correlationId.'
+    tags:
+    - Object
+    source: openapi/prove-identity-verification-api-openapi.yml#/components/schemas/V3ValidateRequest
+  - term: Individual
+    definition: 'Object declared by the contract with fields: firstName, lastName, dob, ssn, emailAddresses, addresses.'
+    tags:
+    - Object
+    source: openapi/prove-identity-verification-api-openapi.yml#/components/schemas/Individual
+  - term: V3CompleteRequest
+    definition: 'Object declared by the contract with fields: correlationId, individual.'
+    tags:
+    - Object
+    source: openapi/prove-identity-verification-api-openapi.yml#/components/schemas/V3CompleteRequest
+  - term: V3ChallengeRequest
+    definition: 'Object declared by the contract with fields: correlationId, dob, ssn.'
+    tags:
+    - Object
+    source: openapi/prove-identity-verification-api-openapi.yml#/components/schemas/V3ChallengeRequest
+  - term: Address
+    definition: 'Object declared by the contract with fields: address, city, region, postalCode.'
+    tags:
+    - Object
+    source: openapi/prove-identity-verification-api-openapi.yml#/components/schemas/Address
+  - term: V3FlowResponse
+    definition: 'Object declared by the contract with fields: success, correlationId, next.'
+    tags:
+    - Object
+    source: openapi/prove-identity-verification-api-openapi.yml#/components/schemas/V3FlowResponse
+  - term: DiscoverResponse
+    definition: 'Object declared by the contract with fields: success, attributes.'
+    tags:
+    - Object
+    source: openapi/prove-pre-fill-api-openapi.yml#/components/schemas/DiscoverResponse
+  - term: FetchResponse
+    definition: 'Object declared by the contract with fields: success, individual.'
+    tags:
+    - Object
+    source: openapi/prove-pre-fill-api-openapi.yml#/components/schemas/FetchResponse
+  - term: V3UnifyStatusResponse
+    definition: 'Object declared by the contract with fields: success, correlationId, evaluation, possessionResult, next.'
+    tags:
+    - Object
+    source: openapi/prove-trust-score-api-openapi.yml#/components/schemas/V3UnifyStatusResponse
+  - term: V3UnifyRequest
+    definition: 'Object declared by the contract with fields: phoneNumber, finalTargetURL, emailAddress, ipAddress, smsMessage, possessionType,
+      clientCustomerId, clientHumanId, clientRequestId, deviceId, proveId, rebind. (2 more)'
+    tags:
+    - Object
+    source: openapi/prove-trust-score-api-openapi.yml#/components/schemas/V3UnifyRequest
+  - term: V3CorrelationRequest
+    definition: 'Object declared by the contract with fields: correlationId.'
+    tags:
+    - Object
+    source: openapi/prove-trust-score-api-openapi.yml#/components/schemas/V3CorrelationRequest

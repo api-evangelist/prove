@@ -1,0 +1,28 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://raw.githubusercontent.com/api-evangelist/prove/main/json-schema/prove-identity-schema.json",
+  "title": "Identity",
+  "x-generated": "2026-10-08",
+  "x-method": "derived",
+  "x-generator": "derive-json-schema.py",
+  "x-source": "openapi/prove-identity-api-openapi.yml#/components/schemas/Identity",
+  "type": "object",
+  "properties": {
+    "proveId": {
+      "type": "string"
+    },
+    "phoneNumber": {
+      "type": "string"
+    },
+    "clientCustomerId": {
+      "type": "string"
+    },
+    "state": {
+      "type": "string"
+    },
+    "identityAttributes": {
+      "type": "object",
+      "additionalProperties": true
+    }
+  }
+}

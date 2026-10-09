@@ -1,0 +1,30 @@
+generated: '2026-10-08'
+method: generated
+source: Packaged Agent Skills generated from Prove's v3 OpenAPI (openapi/_original/prove-openapi.yml) and the flow
+  order published in the prove-postman README. No provider-published skills or AGENTS.md were found (GitHub org
+  prove-identity, 9 repos).
+skills:
+- file: prove-prefill-verify-identity.md
+  name: Verify an identity with Pre-Fill
+  api: openapi/prove-identity-verification-api-openapi.yml
+  operations:
+  - v3StartRequest
+  - v3ValidateRequest
+  - v3ChallengeRequest
+  - v3CompleteRequest
+- file: prove-unified-authentication.md
+  name: Authenticate a user with Unify (Trust Score)
+  api: openapi/prove-trust-score-api-openapi.yml
+  operations:
+  - v3UnifyRequest
+  - v3UnifyBindRequest
+  - v3UnifyStatusRequest
+- file: prove-identity-manager-enroll.md
+  name: Enroll, look up and disenroll an identity
+  api: openapi/prove-identity-api-openapi.yml
+  operations:
+  - v3EnrollIdentity
+  - v3GetIdentity
+  - v3GetIdentitiesByPhoneNumber
+  - v3BatchGetIdentities
+  - v3DisenrollIdentity

@@ -1,0 +1,19 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://raw.githubusercontent.com/api-evangelist/prove/main/json-schema/prove-v3-correlation-request-schema.json",
+  "title": "V3CorrelationRequest",
+  "x-generated": "2026-10-08",
+  "x-method": "derived",
+  "x-generator": "derive-json-schema.py",
+  "x-source": "openapi/prove-trust-score-api-openapi.yml#/components/schemas/V3CorrelationRequest",
+  "type": "object",
+  "required": [
+    "correlationId"
+  ],
+  "properties": {
+    "correlationId": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$"
+    }
+  }
+}

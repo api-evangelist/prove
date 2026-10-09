@@ -1,0 +1,31 @@
+generated: '2026-10-08'
+method: searched
+source:
+- https://www.prove.com/legal/overview (privacy notice links "Trust Center")
+- https://app.vanta.com/prove/trust/p7q3uqiiuel9j5ymrylwzh
+url: https://app.vanta.com/prove/trust/p7q3uqiiuel9j5ymrylwzh
+host: app.vanta.com
+platform: vanta
+platform_evidence: URL on app.vanta.com; rendered title "Trust Center - Prove"
+company: Prove Identity, Inc.
+website: https://www.prove.com
+slug_id: prove
+document_access: 'gated: the rendered page is a request-access form (first name, last name, email, company name,
+  reason) with "Reclaim access" for existing viewers; no framework badges, documents or subprocessors are visible
+  anonymously'
+frameworks: []
+certifications: []
+subprocessors: []
+subprocessor_count: null
+evidence:
+- url: https://app.vanta.com/prove/trust/p7q3uqiiuel9j5ymrylwzh
+  status: 200
+  fetched: '2026-10-08'
+  rendered_text: Prove's Trust Center / First name / Last name / Email / Company name / Reason / Request access
+    / Already have access? Reclaim access
+- url: https://trust.prove.com/
+  status: 404
+  note: S3 NoSuchKey; not the trust center host
+note: A trust center exists and is Prove-operated, but every certification claim sits behind the access request,
+  so none is recorded here. The privacy notice separately states EU-U.S. / UK Extension / Swiss-U.S. Data Privacy
+  Framework certification (see conformance/).

@@ -1,0 +1,22 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://raw.githubusercontent.com/api-evangelist/prove/main/json-schema/prove-discover-response-schema.json",
+  "title": "DiscoverResponse",
+  "x-generated": "2026-10-08",
+  "x-method": "derived",
+  "x-generator": "derive-json-schema.py",
+  "x-source": "openapi/prove-pre-fill-api-openapi.yml#/components/schemas/DiscoverResponse",
+  "type": "object",
+  "properties": {
+    "success": {
+      "type": "boolean"
+    },
+    "attributes": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "description": "Keys of attributes available to fetch."
+    }
+  }
+}

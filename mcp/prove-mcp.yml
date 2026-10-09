@@ -1,0 +1,154 @@
+generated: '2026-10-08'
+method: probed
+status: published
+source:
+- https://developer.prove.com/mcp
+- https://developer.prove.com/.well-known/oauth-protected-resource
+- 'preflight contract_discovery.found (kind: mcp)'
+description: 'A remote MCP server answers at https://developer.prove.com/mcp, the Mintlify-hosted documentation
+  host (CNAME cname.mintlify.builders). An anonymous JSON-RPC tools/list on 2026-10-08 returned three DOCUMENTATION
+  tools (search, read-only docs filesystem query, feedback); none invokes a Prove API operation. The docs behind
+  it are login-gated: an anonymous tools/call search_prove for "rate limits" returned isError "No results found".
+  No MCP server exposing the Prove v3 API itself was found; platform.proveapis.com/mcp and api.proveapis.com/mcp
+  answer 403 for every path (opaque edge, proves nothing).'
+server:
+  name: prove-docs
+  transport: http
+  url: https://developer.prove.com/mcp
+  auth: oauth2 advertised (RFC 9728 protected-resource document names https://developer.prove.com/mcp/oauth); tools/list
+    answered anonymously
+  protected_resource: https://developer.prove.com/.well-known/oauth-protected-resource
+  authorization_server: https://developer.prove.com/mcp/oauth
+  platform: mintlify
+deployment:
+  mode: remote
+  endpoint: https://developer.prove.com/mcp
+  auth: oauth
+  verified: probed
+  probe: tools/list 200 text/event-stream (3 tools) anonymous; tools/call search_prove 200 isError "No results found"
+    anonymous
+  checked: '2026-10-08'
+rfc9728:
+  endpoint: https://developer.prove.com/mcp
+  metadata_url: https://developer.prove.com/.well-known/oauth-protected-resource
+  fetched: '2026-10-08'
+  http_status: 200
+  content_type: application/json
+  document:
+    resource: https://developer.prove.com
+    authorization_servers:
+    - https://developer.prove.com/mcp/oauth
+tools:
+- name: search_prove
+  title: Search documentation
+  description: Search across the Prove knowledge base to find relevant information, code examples, API references,
+    and guides. Use this tool when you need to answer questions about Prove, find specific documentation, understand
+    how features work, or locate implementation details. The search returns contextual content with titles and direct
+    links to the documentation pages. If you need the full content of a specific page, use the query_docs_filesystem
+    tool to `head` or `cat` the page path (append `.mdx` to the path returned from search — e.g. a result at `/some/page`
+    is read with `head -200 /some/page.mdx`).
+  inputSchema:
+    type: object
+    properties:
+      query:
+        type: string
+        description: Search query
+      version:
+        type: string
+        description: Filter to specific version (e.g., 'v0.7')
+    required:
+    - query
+    additionalProperties: false
+  kind: documentation
+- name: query_docs_filesystem_prove
+  title: null
+  description: 'Run a read-only shell-like query against a virtualized, in-memory filesystem rooted at `/` that
+    contains ONLY the Prove documentation pages. This is NOT a shell on any real machine — nothing runs on the user''s
+    computer, the server host, or any network. The filesystem is a sandbox backed by documentation chunks.
+
+
+    This is how you read documentation pages: there is no separate "get page" tool. To read a page, pass its `.mdx`
+    path to `head` or `cat` — a page at the URL path `/some/page` lives at `/some/page.mdx`. To search the docs
+    with exact keyword or regex matches, use `rg`. To understand the docs structure, use `tree` or `ls`.
+
+
+    **Paths are specific to this site — never guess them.** Discover real paths with `tree / -L 2`, `ls /`, or the
+    search tool before reading. If a path does not exist, that only means the guess was wrong; it does NOT mean
+    the topic is undocumented — use `rg -il "keyword" /` to find where it is covered.
+
+
+    **Workflow:** Start with the search tool for broad or conceptual queries like "how to authenticate" or "rate
+    limiting". Use this tool when you need exact keyword/regex matching, structural exploration, or to read the
+    full content of a specific page by path.
+
+
+    Supported commands: rg (ripgrep), grep, find, tree, ls, cat, head, tail, stat, wc, sort, uniq, cut, sed, awk,
+    jq, plus basic text utilities. No writes, no network, no process control. Run `--help` on any command for usage.
+
+
+    Each call is STATELESS: the working directory always resets to `/` and no shell variables, aliases, or history
+    carry over between calls. If you need to operate in a subdirectory, chain commands in one call with `&&` or
+    pass absolute paths (e.g., `cd /some-directory && ls` or `ls /some-directory`). Do NOT assume that `cd` in one
+    call affects the next call.
+
+
+    Examples (replace the placeholder paths with real ones from `tree` or search):
+
+    - `tree / -L 2` — see the top-level directory layout
+
+    - `rg -il "rate limit" /` — find all files mentioning "rate limit"
+
+    - `rg -C 3 "apiKey" /some-directory/` — show matches with 3 lines of context around each hit
+
+    - `head -80 /some/page.mdx` — read the top 80 lines of a specific page
+
+    - `head -80 /page-one.mdx /page-two.mdx /section/page-three.mdx` — read multiple pages in one call
+
+    - `cat /some/page.mdx` — read a full page when you need everything
+
+
+    Output is truncated to 30KB per call. Prefer targeted `rg -C` or `head -N` over broad `cat` on large files.
+    To read only the relevant sections of a large file, use `rg -C 3 "pattern" /path/file.mdx`. Batch multiple file
+    reads into a single `head` or `cat` call whenever possible.
+
+
+    When referencing pages in your response to the user, convert filesystem paths to URL paths by removing the `.mdx`
+    extension. For example, `/some/page.mdx` becomes `/some/page`.'
+  inputSchema:
+    type: object
+    properties:
+      command:
+        type: string
+        description: A shell command to run against the virtualized documentation filesystem (e.g., `rg -il "keyword"
+          /`, `tree / -L 2`, `head -80 /path/file.mdx`).
+    required:
+    - command
+    additionalProperties: false
+  kind: documentation
+- name: submit_feedback
+  title: Submit documentation feedback
+  description: Report a problem with this documentation site so the docs team can fix it. Use when a documentation
+    page is incorrect, outdated, confusing, incomplete, or has a broken example. This is for feedback about the
+    documentation content itself — not for product support requests or feedback about this tool or assistant.
+  inputSchema:
+    type: object
+    properties:
+      path:
+        type: string
+        minLength: 1
+        description: The URL path of the documentation page the feedback is about (the page you were reading, without
+          the `.mdx` extension).
+      feedback:
+        type: string
+        minLength: 1
+        description: A clear description of the documentation issue or suggestion — what is incorrect, outdated,
+          missing, or confusing.
+    required:
+    - path
+    - feedback
+    additionalProperties: false
+  kind: documentation
+api_tools:
+  found: false
+  note: None of the served tools maps to a v3 operation; see mcp/prove-tool-crosswalk.yml (rest_only lists all 26
+    operations).

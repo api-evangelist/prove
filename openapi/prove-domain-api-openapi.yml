@@ -111,6 +111,11 @@ components:
           schema:
             $ref: '#/components/schemas/Error'
   schemas:
+    SuccessResponse:
+      type: object
+      properties:
+        success:
+          type: boolean
     Error:
       type: object
       properties:
@@ -123,11 +128,6 @@ components:
           items:
             type: object
             additionalProperties: true
-    SuccessResponse:
-      type: object
-      properties:
-        success:
-          type: boolean
   securitySchemes:
     bearerAuth:
       type: http

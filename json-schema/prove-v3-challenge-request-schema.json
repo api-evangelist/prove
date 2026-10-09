@@ -1,0 +1,26 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://raw.githubusercontent.com/api-evangelist/prove/main/json-schema/prove-v3-challenge-request-schema.json",
+  "title": "V3ChallengeRequest",
+  "x-generated": "2026-10-08",
+  "x-method": "derived",
+  "x-generator": "derive-json-schema.py",
+  "x-source": "openapi/prove-identity-verification-api-openapi.yml#/components/schemas/V3ChallengeRequest",
+  "type": "object",
+  "required": [
+    "correlationId"
+  ],
+  "properties": {
+    "correlationId": {
+      "type": "string"
+    },
+    "dob": {
+      "type": "string",
+      "description": "Date of birth (YYYY-MM-DD)."
+    },
+    "ssn": {
+      "type": "string",
+      "description": "Last four of SSN."
+    }
+  }
+}

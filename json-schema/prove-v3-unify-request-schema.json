@@ -1,0 +1,63 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://raw.githubusercontent.com/api-evangelist/prove/main/json-schema/prove-v3-unify-request-schema.json",
+  "title": "V3UnifyRequest",
+  "x-generated": "2026-10-08",
+  "x-method": "derived",
+  "x-generator": "derive-json-schema.py",
+  "x-source": "openapi/prove-trust-score-api-openapi.yml#/components/schemas/V3UnifyRequest",
+  "type": "object",
+  "required": [
+    "phoneNumber"
+  ],
+  "properties": {
+    "phoneNumber": {
+      "type": "string"
+    },
+    "finalTargetURL": {
+      "type": "string",
+      "format": "uri"
+    },
+    "emailAddress": {
+      "type": "string"
+    },
+    "ipAddress": {
+      "type": "string"
+    },
+    "smsMessage": {
+      "type": "string"
+    },
+    "possessionType": {
+      "type": "string",
+      "enum": [
+        "desktop",
+        "mobile",
+        "none"
+      ]
+    },
+    "clientCustomerId": {
+      "type": "string"
+    },
+    "clientHumanId": {
+      "type": "string"
+    },
+    "clientRequestId": {
+      "type": "string"
+    },
+    "deviceId": {
+      "type": "string"
+    },
+    "proveId": {
+      "type": "string"
+    },
+    "rebind": {
+      "type": "boolean"
+    },
+    "checkReputation": {
+      "type": "boolean"
+    },
+    "allowOTPRetry": {
+      "type": "boolean"
+    }
+  }
+}

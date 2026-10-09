@@ -117,23 +117,11 @@ components:
           schema:
             $ref: '#/components/schemas/Error'
   schemas:
-    DeviceRevokeRequest:
+    Next:
       type: object
-      properties:
-        deviceId:
-          type: string
-        proveId:
-          type: string
-        phoneNumber:
-          type: string
-    AuthContinueRequest:
-      type: object
-      required:
-      - authId
-      properties:
-        authId:
-          type: string
-          description: Identifier returned by auth start.
+      additionalProperties:
+        type: string
+      description: Map of allowed next operations for the flow (for example `v3-challenge`, `v3-complete`).
     AuthStartRequest:
       type: object
       required:
@@ -146,6 +134,39 @@ components:
         finalTargetURL:
           type: string
           format: uri
+    AuthContinueRequest:
+      type: object
+      required:
+      - authId
+      properties:
+        authId:
+          type: string
+          description: Identifier returned by auth start.
+    SuccessResponse:
+      type: object
+      properties:
+        success:
+          type: boolean
+    DeviceRevokeRequest:
+      type: object
+      properties:
+        deviceId:
+          type: string
+        proveId:
+          type: string
+        phoneNumber:
+          type: string
+    AuthResponse:
+      type: object
+      properties:
+        success:
+          type: boolean
+        authId:
+          type: string
+        evaluation:
+          type: string
+        next:
+          $ref: '#/components/schemas/Next'
     Error:
       type: object
       properties:
@@ -158,27 +179,6 @@ components:
           items:
             type: object
             additionalProperties: true
-    AuthResponse:
-      type: object
-      properties:
-        success:
-          type: boolean
-        authId:
-          type: string
-        evaluation:
-          type: string
-        next:
-          $ref: '#/components/schemas/Next'
-    Next:
-      type: object
-      additionalProperties:
-        type: string
-      description: Map of allowed next operations for the flow (for example `v3-challenge`, `v3-complete`).
-    SuccessResponse:
-      type: object
-      properties:
-        success:
-          type: boolean
   securitySchemes:
     bearerAuth:
       type: http

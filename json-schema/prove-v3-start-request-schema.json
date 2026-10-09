@@ -1,0 +1,54 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://raw.githubusercontent.com/api-evangelist/prove/main/json-schema/prove-v3-start-request-schema.json",
+  "title": "V3StartRequest",
+  "x-generated": "2026-10-08",
+  "x-method": "derived",
+  "x-generator": "derive-json-schema.py",
+  "x-source": "openapi/prove-identity-verification-api-openapi.yml#/components/schemas/V3StartRequest",
+  "type": "object",
+  "required": [
+    "flowType",
+    "phoneNumber"
+  ],
+  "properties": {
+    "flowType": {
+      "type": "string",
+      "enum": [
+        "desktop",
+        "mobile"
+      ],
+      "description": "Whether the session originates on desktop or mobile."
+    },
+    "phoneNumber": {
+      "type": "string",
+      "description": "Customer mobile phone number."
+    },
+    "finalTargetURL": {
+      "type": "string",
+      "format": "uri",
+      "description": "URL to redirect to at the end of a desktop (Instant Link) flow."
+    },
+    "emailAddress": {
+      "type": "string"
+    },
+    "smsMessage": {
+      "type": "string",
+      "description": "Customizable SMS body; use"
+    },
+    "ipAddress": {
+      "type": "string"
+    },
+    "dob": {
+      "type": "string",
+      "description": "Date of birth (YYYY-MM-DD) used to seed reconciliation."
+    },
+    "ssn": {
+      "type": "string",
+      "description": "Full or last-four SSN."
+    },
+    "allowOTPRetry": {
+      "type": "boolean"
+    }
+  }
+}

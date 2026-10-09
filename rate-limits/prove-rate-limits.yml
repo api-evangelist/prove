@@ -1,63 +1,16 @@
-specification: API Commons Rate Limits
-specificationVersion: '0.1'
-schema: https://raw.githubusercontent.com/api-evangelist/interface-research/main/schema/api-commons.yml#/$defs/RateLimits
-provider: Prove
-providerId: prove
-created: '2026-06-21'
-modified: '2026-06-21'
-reconciled: false
-tags:
-- Identity Verification
-- Authentication
-- Phone Intelligence
-- KYC
-- Fraud Prevention
-- Rate Limiting
-- Quotas
-- Throttling
-description: >-
-  Prove does not publish specific numeric rate limits for the v3 API. Throughput
-  is governed per client / per contract and enforced server-side; OAuth 2.0
-  access tokens obtained from /token are short-lived and must be refreshed, which
-  also paces request volume. The v3 verification flow is stateful and ordered
-  (start -> validate -> challenge -> complete) and bound to a correlation ID, so
-  calls are naturally sequenced per session. Specific per-endpoint values are not
-  reconciled in this artifact.
-notes: >-
-  Confirm per-client request ceilings, token TTL, OTP retry limits
-  (allowOTPRetry), and any burst/concurrency caps with Prove during onboarding;
-  values vary by contract and environment (UAT vs. production).
-sources:
-- https://developer.prove.com
-- https://developer.prove.com/docs/prove-pre-fill-flow
-responseCodes:
-  throttled: 429
-limits:
-- name: Per-Client Request Rate
-  scope: client
-  metric: requests
-  limit: see provider documentation
-  notes: Governed per client/contract; not publicly published.
-- name: Access Token Lifetime
-  scope: client
-  metric: seconds
-  limit: short-lived (expires_in returned by /token)
-  notes: Bearer tokens expire and must be reissued via the client-credentials grant.
-- name: OTP Retry
-  scope: session
-  metric: attempts
-  limit: controlled by allowOTPRetry
-  notes: Number of one-time-passcode retries is bounded per Pre-Fill / Unify session.
-- name: Batch Enroll Size
-  scope: request
-  metric: identities
-  limit: 100
-  notes: POST /v3/identity/batch enrolls up to 100 identities per request.
-policies:
-- name: Contractual Limits
-  description: Effective limits are set per client agreement rather than a public tier.
-- name: Backoff Strategy
-  description: Clients should implement exponential backoff with jitter and honor Retry-After on 429 responses.
-maintainers:
-- FN: Kin Lane
-  email: kin@apievangelist.com
+# Rewritten 2026-10-08: the 2026-06-21 generated file carried placeholder rows, not published limits.
+generated: '2026-10-08'
+method: none
+name: Prove rate limits
+source:
+- openapi/_original/prove-openapi.yml (no 429 response, no RateLimit-*/Retry-After headers)
+- https://raw.githubusercontent.com/prove-identity/prove-sdk-server-typescript/main/README.md
+- https://developer.prove.com/ (login-gated)
+limit_count: 0
+limits: []
+headers: []
+status_on_exhaustion: null
+note: 'No rate limit is published where an anonymous reader can see it: the contract declares no 429 and no rate-limit
+  headers, the SDK READMEs document only client-side retries, and the developer portal redirects every page to a
+  login. The earlier file (method: generated, 2026-06-21) carried non-numeric placeholder rows ("see provider documentation");
+  they are removed as an honest zero.'

@@ -1,16 +1,45 @@
-generated: '2026-07-11'
-method: derived
-source: openapi/prove-openapi.yml
-docs: https://developer.prove.com/tutorial/access-api-keys
-note: Prove's API uses an OAuth 2.0 client_credentials flow with no published scopes
-  - access is governed by the client_id/client_secret credentials themselves, and
-  Prove's official server SDKs request tokens with an empty scope list (see
-  https://developer.prove.com/tutorial/access-api-keys and
-  https://github.com/prove-identity/prove-sdk-server-go).
+generated: '2026-10-08'
+method: none
+source: openapi/prove-auth-api-openapi.yml, openapi/prove-authentication-api-openapi.yml, openapi/prove-domain-api-openapi.yml,
+  openapi/prove-identity-api-openapi.yml, openapi/prove-identity-verification-api-openapi.yml, openapi/prove-pre-fill-api-openapi.yml,
+  openapi/prove-trust-score-api-openapi.yml
 schemes:
 - name: oauth2
-  source: openapi/prove-openapi.yml
+  source: openapi/prove-auth-api-openapi.yml
+  flows:
+  - flow: clientCredentials
+    tokenUrl: https://api.prove.com/v3/token
+- name: oauth2
+  source: openapi/prove-authentication-api-openapi.yml
+  flows:
+  - flow: clientCredentials
+    tokenUrl: https://api.prove.com/v3/token
+- name: oauth2
+  source: openapi/prove-domain-api-openapi.yml
+  flows:
+  - flow: clientCredentials
+    tokenUrl: https://api.prove.com/v3/token
+- name: oauth2
+  source: openapi/prove-identity-api-openapi.yml
+  flows:
+  - flow: clientCredentials
+    tokenUrl: https://api.prove.com/v3/token
+- name: oauth2
+  source: openapi/prove-identity-verification-api-openapi.yml
+  flows:
+  - flow: clientCredentials
+    tokenUrl: https://api.prove.com/v3/token
+- name: oauth2
+  source: openapi/prove-pre-fill-api-openapi.yml
+  flows:
+  - flow: clientCredentials
+    tokenUrl: https://api.prove.com/v3/token
+- name: oauth2
+  source: openapi/prove-trust-score-api-openapi.yml
   flows:
   - flow: clientCredentials
     tokenUrl: https://api.prove.com/v3/token
 scopes: []
+note: The contract declares an oauth2 clientCredentials flow with an empty scopes map and a bearerAuth scheme; no
+  scopes or permissions reference is readable (developer.prove.com/tutorial/access-api-keys redirects to /login).
+  Access is scoped per Portal project credential, not per OAuth scope.

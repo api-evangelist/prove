@@ -1,0 +1,33 @@
+generated: '2026-10-08'
+method: searched
+source:
+- https://status.prove.com/
+- openapi/_original/prove-openapi.yml
+- https://raw.githubusercontent.com/prove-identity/prove-sdk-server-typescript/main/README.md
+- https://developer.prove.com/ (redirects to /login?redirect=%2F, 200)
+versioning:
+  scheme: url-path
+  current: v3
+  mechanism: 'Major version in the URL path: every server URL ends in /v3 and the SDKs namespace operations as v3
+    (v3StartRequest ...).'
+  docs: null
+  notes: No versioning policy page is readable anonymously; developer.prove.com redirects every path to a login
+    page.
+deprecation:
+  policy_url: null
+  sunset_header: false
+  deprecation_header: false
+  notes: No public deprecation policy found. The contract flags no operation deprecated:true. The developer portal
+    is login-gated so a customer-facing policy may exist behind it.
+sla:
+  url: null
+  public_uptime_target: null
+  notes: No public SLA page found on www.prove.com (sitemap of 1,590 URLs holds no SLA or pricing page).
+status_page: https://status.prove.com/
+status_page_detail:
+  platform: Atlassian Statuspage (subscription_dialog, system-status-component markup)
+  components:
+  - Prove Verified User
+  - Prove Mobile Auth
+  note: Returned a Cloudflare challenge (403) to curl; renders fully in a browser (title "Prove Identity | Status").
+deprecated_operations: []

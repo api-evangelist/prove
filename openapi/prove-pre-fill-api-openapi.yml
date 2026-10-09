@@ -61,6 +61,24 @@ components:
           schema:
             $ref: '#/components/schemas/Error'
   schemas:
+    FetchResponse:
+      type: object
+      properties:
+        success:
+          type: boolean
+        individual:
+          $ref: '#/components/schemas/Individual'
+    Address:
+      type: object
+      properties:
+        address:
+          type: string
+        city:
+          type: string
+        region:
+          type: string
+        postalCode:
+          type: string
     DiscoverResponse:
       type: object
       properties:
@@ -71,13 +89,6 @@ components:
           items:
             type: string
           description: Keys of attributes available to fetch.
-    FetchResponse:
-      type: object
-      properties:
-        success:
-          type: boolean
-        individual:
-          $ref: '#/components/schemas/Individual'
     Individual:
       type: object
       properties:
@@ -109,17 +120,6 @@ components:
           items:
             type: object
             additionalProperties: true
-    Address:
-      type: object
-      properties:
-        address:
-          type: string
-        city:
-          type: string
-        region:
-          type: string
-        postalCode:
-          type: string
   securitySchemes:
     bearerAuth:
       type: http

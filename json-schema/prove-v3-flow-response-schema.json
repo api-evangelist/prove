@@ -1,0 +1,30 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://raw.githubusercontent.com/api-evangelist/prove/main/json-schema/prove-v3-flow-response-schema.json",
+  "title": "V3FlowResponse",
+  "x-generated": "2026-10-08",
+  "x-method": "derived",
+  "x-generator": "derive-json-schema.py",
+  "x-source": "openapi/prove-identity-verification-api-openapi.yml#/components/schemas/V3FlowResponse",
+  "type": "object",
+  "properties": {
+    "success": {
+      "type": "boolean"
+    },
+    "correlationId": {
+      "type": "string"
+    },
+    "next": {
+      "$ref": "#/$defs/Next"
+    }
+  },
+  "$defs": {
+    "Next": {
+      "type": "object",
+      "additionalProperties": {
+        "type": "string"
+      },
+      "description": "Map of allowed next operations for the flow (for example `v3-challenge`, `v3-complete`)."
+    }
+  }
+}

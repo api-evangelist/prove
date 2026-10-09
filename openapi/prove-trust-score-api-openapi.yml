@@ -93,20 +93,25 @@ paths:
         '401':
           $ref: '#/components/responses/Unauthorized'
 components:
+  responses:
+    Unauthorized:
+      description: Missing, invalid, or expired access token.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    BadRequest:
+      description: The request was malformed or failed validation.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
   schemas:
-    V3UnifyStatusResponse:
+    Next:
       type: object
-      properties:
-        success:
-          type: boolean
-        correlationId:
-          type: string
-        evaluation:
-          type: string
-        possessionResult:
-          type: string
-        next:
-          $ref: '#/components/schemas/Next'
+      additionalProperties:
+        type: string
+      description: Map of allowed next operations for the flow (for example `v3-challenge`, `v3-complete`).
     V3UnifyRequest:
       type: object
       required:
@@ -145,6 +150,15 @@ components:
           type: boolean
         allowOTPRetry:
           type: boolean
+    V3FlowResponse:
+      type: object
+      properties:
+        success:
+          type: boolean
+        correlationId:
+          type: string
+        next:
+          $ref: '#/components/schemas/Next'
     V3CorrelationRequest:
       type: object
       required:
@@ -153,6 +167,19 @@ components:
         correlationId:
           type: string
           pattern: ^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$
+    V3UnifyStatusResponse:
+      type: object
+      properties:
+        success:
+          type: boolean
+        correlationId:
+          type: string
+        evaluation:
+          type: string
+        possessionResult:
+          type: string
+        next:
+          $ref: '#/components/schemas/Next'
     Error:
       type: object
       properties:
@@ -165,33 +192,6 @@ components:
           items:
             type: object
             additionalProperties: true
-    Next:
-      type: object
-      additionalProperties:
-        type: string
-      description: Map of allowed next operations for the flow (for example `v3-challenge`, `v3-complete`).
-    V3FlowResponse:
-      type: object
-      properties:
-        success:
-          type: boolean
-        correlationId:
-          type: string
-        next:
-          $ref: '#/components/schemas/Next'
-  responses:
-    Unauthorized:
-      description: Missing, invalid, or expired access token.
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
-    BadRequest:
-      description: The request was malformed or failed validation.
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
   securitySchemes:
     bearerAuth:
       type: http

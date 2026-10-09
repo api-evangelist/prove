@@ -1,0 +1,34 @@
+overlay: 1.0.0
+info:
+  title: API Evangelist base-URL correction for Prove Authentication API
+  version: 1.0.0
+  description: Records, without mutating the contract, that api.prove.com (first server) does not resolve in DNS
+    as of 2026-10-08 and that the provider-published server list (SDK README) is the four regional platform.proveapis.com
+    hosts.
+x-apievangelist:
+  generated: '2026-10-08'
+  method: derived
+  source:
+  - https://raw.githubusercontent.com/prove-identity/prove-sdk-server-typescript/main/README.md
+  - dig api.prove.com (no answer, 2026-10-08)
+extends: openapi/prove-authentication-api-openapi.yml
+actions:
+- target: $.servers
+  description: Replace the server list with the provider-published regional hosts; api.prove.com does not resolve.
+  remove: true
+- target: $
+  description: Set the server list verbatim from the SDK README Server Selection table.
+  update:
+    servers:
+    - url: https://platform.proveapis.com/v3
+      description: Prod for US Region
+    - url: https://platform.eu.proveapis.com/v3
+      description: Prod for EU Region
+    - url: https://platform.uat.proveapis.com/v3
+      description: UAT for US Region
+    - url: https://platform.uat.eu.proveapis.com/v3
+      description: UAT for EU Region
+- target: $.components.securitySchemes.oauth2.flows.clientCredentials
+  description: Token endpoint on the resolving production host.
+  update:
+    tokenUrl: https://platform.proveapis.com/v3/token

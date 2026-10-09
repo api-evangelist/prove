@@ -1,0 +1,66 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://raw.githubusercontent.com/api-evangelist/prove/main/json-schema/prove-fetch-response-schema.json",
+  "title": "FetchResponse",
+  "x-generated": "2026-10-08",
+  "x-method": "derived",
+  "x-generator": "derive-json-schema.py",
+  "x-source": "openapi/prove-pre-fill-api-openapi.yml#/components/schemas/FetchResponse",
+  "type": "object",
+  "properties": {
+    "success": {
+      "type": "boolean"
+    },
+    "individual": {
+      "$ref": "#/$defs/Individual"
+    }
+  },
+  "$defs": {
+    "Address": {
+      "type": "object",
+      "properties": {
+        "address": {
+          "type": "string"
+        },
+        "city": {
+          "type": "string"
+        },
+        "region": {
+          "type": "string"
+        },
+        "postalCode": {
+          "type": "string"
+        }
+      }
+    },
+    "Individual": {
+      "type": "object",
+      "properties": {
+        "firstName": {
+          "type": "string"
+        },
+        "lastName": {
+          "type": "string"
+        },
+        "dob": {
+          "type": "string"
+        },
+        "ssn": {
+          "type": "string"
+        },
+        "emailAddresses": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "addresses": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/Address"
+          }
+        }
+      }
+    }
+  }
+}

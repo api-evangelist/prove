@@ -1,0 +1,107 @@
+generated: '2026-10-08'
+method: derived
+generator: derive-data-model.py
+source:
+- openapi/prove-auth-api-openapi.yml
+- openapi/prove-authentication-api-openapi.yml
+- openapi/prove-domain-api-openapi.yml
+- openapi/prove-identity-api-openapi.yml
+- openapi/prove-identity-verification-api-openapi.yml
+- openapi/prove-pre-fill-api-openapi.yml
+- openapi/prove-trust-score-api-openapi.yml
+notation: has_one = property $ref; has_many = array of $ref; belongs_to = <entity>_id field
+summary:
+  entities: 26
+  entities_in_spec: 26
+  relationships: 9
+entities:
+- name: Address
+  fields: 4
+- name: AuthContinueRequest
+  fields: 1
+- name: AuthResponse
+  fields: 4
+- name: AuthStartRequest
+  fields: 3
+- name: DeviceRevokeRequest
+  fields: 3
+- name: DiscoverResponse
+  fields: 2
+- name: EnrollIdentityRequest
+  fields: 6
+- name: Error
+  fields: 3
+- name: FetchResponse
+  fields: 2
+- name: Identity
+  fields: 5
+- name: IdentityListResponse
+  fields: 2
+- name: Individual
+  fields: 6
+- name: Next
+  fields: 0
+  description: Map of allowed next operations for the flow (for example `v3-challenge`, `v3-complete`).
+- name: SuccessResponse
+  fields: 1
+- name: TokenRequest
+  fields: 3
+- name: TokenResponse
+  fields: 5
+- name: V3ChallengeRequest
+  fields: 3
+- name: V3CompleteRequest
+  fields: 2
+- name: V3CompleteResponse
+  fields: 5
+- name: V3CorrelationRequest
+  fields: 1
+- name: V3FlowResponse
+  fields: 3
+- name: V3StartRequest
+  fields: 9
+- name: V3StartResponse
+  fields: 4
+- name: V3UnifyRequest
+  fields: 14
+- name: V3UnifyStatusResponse
+  fields: 5
+- name: V3ValidateRequest
+  fields: 1
+relationships:
+- from: AuthResponse
+  to: Next
+  type: has_one
+  via: next
+- from: IdentityListResponse
+  to: Identity
+  type: has_many
+  via: identities
+- from: V3StartResponse
+  to: Next
+  type: has_one
+  via: next
+- from: V3CompleteResponse
+  to: Next
+  type: has_one
+  via: next
+- from: Individual
+  to: Address
+  type: has_many
+  via: addresses
+- from: V3CompleteRequest
+  to: Individual
+  type: has_one
+  via: individual
+- from: V3FlowResponse
+  to: Next
+  type: has_one
+  via: next
+- from: FetchResponse
+  to: Individual
+  type: has_one
+  via: individual
+- from: V3UnifyStatusResponse
+  to: Next
+  type: has_one
+  via: next

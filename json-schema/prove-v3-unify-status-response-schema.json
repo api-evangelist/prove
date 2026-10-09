@@ -1,0 +1,36 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://raw.githubusercontent.com/api-evangelist/prove/main/json-schema/prove-v3-unify-status-response-schema.json",
+  "title": "V3UnifyStatusResponse",
+  "x-generated": "2026-10-08",
+  "x-method": "derived",
+  "x-generator": "derive-json-schema.py",
+  "x-source": "openapi/prove-trust-score-api-openapi.yml#/components/schemas/V3UnifyStatusResponse",
+  "type": "object",
+  "properties": {
+    "success": {
+      "type": "boolean"
+    },
+    "correlationId": {
+      "type": "string"
+    },
+    "evaluation": {
+      "type": "string"
+    },
+    "possessionResult": {
+      "type": "string"
+    },
+    "next": {
+      "$ref": "#/$defs/Next"
+    }
+  },
+  "$defs": {
+    "Next": {
+      "type": "object",
+      "additionalProperties": {
+        "type": "string"
+      },
+      "description": "Map of allowed next operations for the flow (for example `v3-challenge`, `v3-complete`)."
+    }
+  }
+}

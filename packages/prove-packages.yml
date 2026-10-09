@@ -1,0 +1,98 @@
+generated: '2026-10-08'
+method: searched
+source:
+- https://api.github.com/orgs/prove-identity/repos
+- https://registry.npmjs.org/@prove-identity%2Fprove-api
+- https://registry.npmjs.org/-/v1/search?text=prove-identity
+- https://proxy.golang.org/github.com/prove-identity/prove-sdk-server-go/@latest
+- https://repo1.maven.org/maven2/com/prove/proveapi/maven-metadata.xml
+- https://api.nuget.org/v3/registration5-semver1/prove.proveapi/index.json
+- https://raw.githubusercontent.com/prove-identity/prove-sdk-server-java/main/README.md
+- https://raw.githubusercontent.com/prove-identity/prove-sdk-server-dotnet/main/README.md
+note: Server SDKs are Speakeasy-generated from a private OpenAPI source (.speakeasy/workflow.yaml names https://raw.githubusercontent.com/payfone/prove-openapi/main/orchestration.yaml
+  behind an auth token; anonymous GET 404). The GitHub org prove-identity is linked from www.prove.com (dossier
+  site_links). Payfone is the company's former name and still owns the mobile-auth repository.
+packages:
+- name: '@prove-identity/prove-api'
+  registry: npm
+  url: https://www.npmjs.com/package/@prove-identity/prove-api
+  language: typescript
+  official: true
+  version: 0.14.12
+  published: '2026-07-21'
+  install: npm add @prove-identity/prove-api
+  repository: https://github.com/prove-identity/prove-sdk-server-typescript
+  note: TypeScript Server SDK for Prove APIs; repo pushed 2026-10-08, last npm release 0.14.12.
+  ownership_audit: metadata names prove.com
+- name: github.com/prove-identity/prove-sdk-server-go
+  registry: go
+  url: https://pkg.go.dev/github.com/prove-identity/prove-sdk-server-go
+  language: go
+  official: true
+  version: v0.15.0
+  published: '2026-10-06'
+  install: go get github.com/prove-identity/prove-sdk-server-go
+  repository: https://github.com/prove-identity/prove-sdk-server-go
+- name: com.prove:proveapi
+  registry: maven
+  url: https://central.sonatype.com/artifact/com.prove/proveapi
+  language: java
+  official: true
+  version: 0.21.8
+  published: '2026-07-16'
+  install: implementation 'com.prove:proveapi:0.21.8'
+  repository: https://github.com/prove-identity/prove-sdk-server-java
+  note: Version 0.21.8 is <latest> in repo1.maven.org maven-metadata.xml and the one the README installs; the search.maven.org
+    index returned 0 rows for g:com.prove, so the date comes from the metadata lastUpdated stamp.
+- name: Prove.Proveapi
+  registry: nuget
+  url: https://www.nuget.org/packages/Prove.Proveapi
+  language: csharp
+  official: false
+  version: 1.6.0
+  published: null
+  install: dotnet add package Prove.Proveapi
+  repository: https://github.com/prove-identity/prove-sdk-server-dotnet
+  note: 'UNLISTED. The README states "This package has been unlisted on Nuget and can no longer be published"; the
+    NuGet registration index shows 1.6.0 with listed: false and a placeholder published date, so no release date
+    is recorded. The repo was still pushed 2026-10-08.'
+  ownership_audit: 'registry metadata names neither the provider''s domain nor its GitHub org: official downgraded
+    (harvest-packages.py --audit)'
+  ownership_evidence: README of github.com/prove-identity/prove-sdk-server-dotnet (org linked from www.prove.com)
+    names https://www.nuget.org/packages/Prove.Proveapi as its package and `dotnet add package Prove.Proveapi` as
+    the install.
+- name: '@prove-identity/prove-auth'
+  registry: npm
+  url: https://www.npmjs.com/package/@prove-identity/prove-auth
+  language: javascript
+  official: true
+  version: 3.6.4
+  published: '2026-07-07'
+  install: npm add @prove-identity/prove-auth
+  homepage: https://www.prove.com/solutions/auth
+  license: CC BY-NC-ND 4.0
+  note: Prove Auth SDK for Web (client-side). Published under the @prove-identity npm scope; no public source repository
+    is declared.
+  ownership_audit: metadata names prove.com
+- name: '@prove-identity/mobile-auth'
+  registry: npm
+  url: https://www.npmjs.com/package/@prove-identity/mobile-auth
+  language: javascript
+  official: true
+  version: 3.3.2
+  published: '2026-09-30'
+  install: npm add @prove-identity/mobile-auth
+  repository: https://github.com/payfone/sdk
+  license: CC BY-NC-ND 4.0
+  note: Prove MobileAuth SDK. Repository is under the payfone org (Prove's former name); the org is public but this
+    repo is not listed, so it is private.
+  ownership_audit: metadata names prove.com
+- name: prove-sdk-client-ios
+  registry: github
+  url: https://github.com/prove-identity/prove-sdk-client-ios
+  language: swift
+  official: true
+  version: null
+  published: null
+  note: Repo named "iOS Client SDK for Prove APIs" holds only a README (tree read 2026-10-08); no Package.swift,
+    podspec or release, so there is no version to record.

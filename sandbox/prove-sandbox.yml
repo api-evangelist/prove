@@ -1,0 +1,92 @@
+generated: '2026-10-08'
+method: searched
+source:
+- https://raw.githubusercontent.com/prove-identity/prove-postman/main/README.md
+- https://raw.githubusercontent.com/prove-identity/prove-sdk-server-typescript/main/README.md
+- https://raw.githubusercontent.com/prove-identity/prove-prefill-react-starter-kit-v3/main/README.md
+description: Prove runs a separate UAT (sandbox) environment per region beside production. Sandbox credentials are
+  a project-scoped OAuth client ID and client secret created in the Prove Portal (Pre-Fill > New Project > Settings
+  > Credentials) and exchanged at POST /token (client credentials). The Postman collection ships a pre-configured
+  test user, "Milo Pinson", for walking the Pre-Fill flow (start -> validate -> challenge -> complete) against UAT.
+  The full test-user catalog lives on a docs page that now redirects to a customer login.
+docs:
+- https://developer.prove.com/docs/prove-pre-fill-sandbox-testing#prove-pre-fill-test-users
+- https://github.com/prove-identity/prove-postman
+- https://github.com/prove-identity/prove-prefill-react-starter-kit-v3
+environments:
+- name: uat-us
+  base_url: https://platform.uat.proveapis.com
+  description: UAT for US Region
+  source: SDK README Server Selection table
+- name: prod-us
+  base_url: https://platform.proveapis.com
+  description: Prod for US Region
+  source: SDK README Server Selection table
+- name: uat-eu
+  base_url: https://platform.uat.eu.proveapis.com
+  description: UAT for EU Region
+  source: SDK README Server Selection table
+- name: prod-eu
+  base_url: https://platform.eu.proveapis.com
+  description: Prod for EU Region
+  source: SDK README Server Selection table
+modes:
+- name: sandbox
+  environment: uat-us / uat-eu
+  credentials: Sandbox project Client ID + Client Secret from https://portal.prove.com (Pre-Fill section, project
+    Settings > Credentials)
+  notes: Postman README sets API_BASE_URL to https://platform.uat.proveapis.com; react starter kit runs with NODE_ENV=sandbox.
+- name: production
+  environment: prod-us / prod-eu
+  credentials: Production credentials issued under a Prove agreement
+  notes: No self-serve production access is documented publicly.
+key_formats:
+  client_id: opaque (no documented prefix)
+  client_secret: opaque (no documented prefix)
+  access_token: OAuth 2.0 bearer from POST /token; expires_in returned
+test_values:
+  test_user:
+    name: Milo Pinson
+    source: https://raw.githubusercontent.com/prove-identity/prove-postman/main/README.md ("The collection comes
+      pre-configured with test data for \"Milo Pinson\" for sandbox testing")
+  postman_environment:
+    name: Prove Sandbox Pre-Fill with Milo Pinson
+    variables:
+    - key: correlationId
+      value: null
+    - key: firstName
+      value: Milo
+    - key: lastName
+      value: Pinson
+    - key: dob
+      value: '1981-01-17'
+    - key: ssn
+      value: '847350596'
+    - key: address
+      value: 6377 Birchwood Hill
+    - key: city
+      value: Littleton
+    - key: postalCode
+      value: 80161-2001
+    - key: region
+      value: CO
+    - key: emailAddress
+      value: mpinsonm@dyndns.org
+    - key: phoneNumber
+      value: '2001001695'
+    - key: ipAddress
+      value: null
+    - key: flowType
+      value: mobile
+    - key: finalTargetUrl
+      value: https://prove.com
+    - key: smsMessage
+      value: 'Customizable sms message. Code: ####'
+    source: Decoded from the Run-in-Postman env parameter in the prove-postman README (provider-published).
+time_simulation: null
+triggers: null
+gaps:
+- The sandbox-testing docs page (test users and scenarios) 302s to https://developer.prove.com/login?redirect=...
+  for anonymous readers.
+- 'Only one test user is published outside the login: Milo Pinson.'
+- No test clocks, fixtures or event triggers are documented.

@@ -1,0 +1,35 @@
+generated: '2026-10-08'
+method: searched
+source:
+- https://www.prove.com/sitemap.xml
+- https://www.prove.com/legal/exercise-your-rights
+- https://www.prove.com/legal/overview
+- https://www.prove.com/.well-known/security.txt (404)
+- https://www.prove.com/legal/subprocessors (404)
+- https://www.prove.com/accessibility (404)
+note: Harvest only. The horizontal signals were hunted in the artifacts of this run, on the conventional paths,
+  and across the 1,590-URL www.prove.com sitemap. Only a data-subject-rights page carries substance; the trust center
+  (Vanta) is behind a request-access form so no subprocessor list, SBOM or accessibility report was readable.
+signals:
+  data_subject_request:
+    url: https://www.prove.com/legal/exercise-your-rights
+    section: Exercise Your Rights (Updated October 31, 2024)
+    note: Names GDPR/UK GDPR rights (rectify, erase, restrict) and US state consumer rights (CA, CO, CT, NV, UT,
+      VA); directs consumers to the Prove client first; privacy@prove.com / 888-315-8780 on the privacy notice.
+    evidence:
+    - source: https://www.prove.com/legal/exercise-your-rights
+      http_status: 200
+      fetched: '2026-10-08'
+      quote: If you are a resident of the European Union (EU) or the United Kingdom (UK), you may have certain rights
+        under the General Data Protection Regulation (“GDPR”) or the UK GDPR to ask Prove to (among other things)
+        rectify inaccurate personal data, erase your personal data, or restrict its processing.
+absent:
+  sbom: no /security/sbom or SBOM mention found
+  subprocessors: /legal/subprocessors 404; trust center gated
+  accessibility_conformance: /accessibility 404; no VPAT in sitemap
+  global_privacy_control: privacy notice describes cookie-icon opt-out only; no GPC statement
+  data_residency: EU and US regional API hosts exist (SDK README) but no residency commitment page was found
+  transparency_report: none
+  incident_notification: none public
+  age_assurance: none
+  ai_transparency: /ai-info is a marketing "What is Prove?" page

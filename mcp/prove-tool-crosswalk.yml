@@ -1,0 +1,70 @@
+generated: '2026-10-08'
+method: derived
+source: Live tools/list from https://developer.prove.com/mcp (2026-10-08) aligned against openapi/_original/prove-openapi.yml
+  (26 operations).
+purpose: Bind each MCP tool to the REST operation(s) it invokes. The only MCP server Prove serves is the Mintlify
+  documentation server, whose three tools search and read docs; no tool calls a Prove API operation, so crosswalk
+  is empty by finding, not by omission.
+surfaces:
+  rest_openapi: openapi/prove-openapi.yml (split per tag into openapi/prove-*-api-openapi.yml)
+  rest_base: https://platform.proveapis.com/v3
+  graphql: null
+  mcp: https://developer.prove.com/mcp (documentation tools; docs behind login, search returns no results anonymously)
+crosswalk: []
+mcp_only:
+- tool: search_prove
+  category: documentation
+  reason: Documentation-host tool (Mintlify); searches or reads the docs corpus, invokes no v3 operation.
+- tool: query_docs_filesystem_prove
+  category: documentation
+  reason: Documentation-host tool (Mintlify); searches or reads the docs corpus, invokes no v3 operation.
+- tool: submit_feedback
+  category: documentation
+  reason: Documentation-host tool (Mintlify); searches or reads the docs corpus, invokes no v3 operation.
+rest_only:
+- group: Authentication
+  ops:
+  - v3TokenRequest
+- group: Identity Verification
+  ops:
+  - v3StartRequest
+  - v3ValidateRequest
+  - v3ChallengeRequest
+  - v3CompleteRequest
+- group: Trust Score
+  ops:
+  - v3UnifyRequest
+  - v3UnifyBindRequest
+  - v3UnifyStatusRequest
+- group: Pre-Fill
+  ops:
+  - v3DiscoverRequest
+  - v3FetchRequest
+- group: Auth
+  ops:
+  - authStartRequest
+  - authContinueRequest
+  - authFinishRequest
+  - v3DeviceRevokeRequest
+- group: Identity
+  ops:
+  - v3BatchGetIdentities
+  - v3EnrollIdentity
+  - v3BatchEnrollIdentities
+  - v3GetIdentitiesByPhoneNumber
+  - v3GetIdentity
+  - v3DisenrollIdentity
+  - v3CrossDomainIdentity
+- group: Domain
+  ops:
+  - v3DomainLinkRequest
+  - v3DomainConfirmLinkRequest
+  - v3DomainUnlinkRequest
+  - v3DomainIDRequest
+  - v3DomainLinkedRequest
+coverage:
+  mcp_tools_named: 3
+  mcp_bound_to_rest: 0
+  mcp_only: 3
+  rest_operations_total: 26
+  rest_operations_with_mcp_tool: 0

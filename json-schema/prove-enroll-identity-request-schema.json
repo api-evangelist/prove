@@ -1,0 +1,35 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://raw.githubusercontent.com/api-evangelist/prove/main/json-schema/prove-enroll-identity-request-schema.json",
+  "title": "EnrollIdentityRequest",
+  "x-generated": "2026-10-08",
+  "x-method": "derived",
+  "x-generator": "derive-json-schema.py",
+  "x-source": "openapi/prove-identity-api-openapi.yml#/components/schemas/EnrollIdentityRequest",
+  "type": "object",
+  "required": [
+    "phoneNumber"
+  ],
+  "properties": {
+    "phoneNumber": {
+      "type": "string"
+    },
+    "clientCustomerId": {
+      "type": "string"
+    },
+    "clientHumanId": {
+      "type": "string"
+    },
+    "clientRequestId": {
+      "type": "string"
+    },
+    "deviceId": {
+      "type": "string"
+    },
+    "identityAttributes": {
+      "type": "object",
+      "additionalProperties": true,
+      "description": "Customer attributes to persist with the identity record."
+    }
+  }
+}

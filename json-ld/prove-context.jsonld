@@ -1,0 +1,246 @@
+{
+  "@context": {
+    "@vocab": "https://prove.com/schema#",
+    "schema": "https://schema.org/",
+    "xsd": "http://www.w3.org/2001/XMLSchema#",
+    "dcterms": "http://purl.org/dc/terms/",
+    "prove": "https://prove.com/schema#",
+    "DeviceRevokeRequest": "prove:DeviceRevokeRequest",
+    "deviceId": {
+      "@id": "prove:deviceId",
+      "@type": "xsd:string"
+    },
+    "proveId": {
+      "@id": "prove:proveId",
+      "@type": "xsd:string"
+    },
+    "phoneNumber": {
+      "@id": "prove:phoneNumber",
+      "@type": "xsd:string"
+    },
+    "AuthContinueRequest": "prove:AuthContinueRequest",
+    "authId": {
+      "@id": "prove:authId",
+      "@type": "xsd:string"
+    },
+    "AuthStartRequest": "prove:AuthStartRequest",
+    "clientRequestId": {
+      "@id": "prove:clientRequestId",
+      "@type": "xsd:string"
+    },
+    "finalTargetURL": {
+      "@id": "prove:finalTargetURL",
+      "@type": "@id"
+    },
+    "Error": "prove:Error",
+    "code": {
+      "@id": "prove:code",
+      "@type": "xsd:string"
+    },
+    "message": {
+      "@id": "prove:message",
+      "@type": "xsd:string"
+    },
+    "details": {
+      "@id": "prove:details",
+      "@container": "@list"
+    },
+    "AuthResponse": "prove:AuthResponse",
+    "success": {
+      "@id": "prove:success",
+      "@type": "xsd:boolean"
+    },
+    "evaluation": {
+      "@id": "prove:evaluation",
+      "@type": "xsd:string"
+    },
+    "next": {
+      "@id": "prove:next",
+      "@type": "@id"
+    },
+    "SuccessResponse": "prove:SuccessResponse",
+    "TokenResponse": "prove:TokenResponse",
+    "access_token": {
+      "@id": "prove:access_token",
+      "@type": "xsd:string"
+    },
+    "token_type": {
+      "@id": "prove:token_type",
+      "@type": "xsd:string"
+    },
+    "expires_in": {
+      "@id": "prove:expires_in",
+      "@type": "xsd:integer"
+    },
+    "refresh_token": {
+      "@id": "prove:refresh_token",
+      "@type": "xsd:string"
+    },
+    "refresh_expires_in": {
+      "@id": "prove:refresh_expires_in",
+      "@type": "xsd:integer"
+    },
+    "TokenRequest": "prove:TokenRequest",
+    "grant_type": {
+      "@id": "prove:grant_type",
+      "@type": "xsd:string"
+    },
+    "client_id": {
+      "@id": "prove:client_id",
+      "@type": "xsd:string"
+    },
+    "client_secret": {
+      "@id": "prove:client_secret",
+      "@type": "xsd:string"
+    },
+    "Identity": "prove:Identity",
+    "clientCustomerId": {
+      "@id": "prove:clientCustomerId",
+      "@type": "xsd:string"
+    },
+    "state": {
+      "@id": "prove:state",
+      "@type": "xsd:string"
+    },
+    "identityAttributes": {
+      "@id": "prove:identityAttributes"
+    },
+    "IdentityListResponse": "prove:IdentityListResponse",
+    "identities": {
+      "@id": "prove:identities",
+      "@container": "@list"
+    },
+    "lastKey": {
+      "@id": "prove:lastKey",
+      "@type": "xsd:string"
+    },
+    "EnrollIdentityRequest": "prove:EnrollIdentityRequest",
+    "clientHumanId": {
+      "@id": "prove:clientHumanId",
+      "@type": "xsd:string"
+    },
+    "V3StartResponse": "prove:V3StartResponse",
+    "correlationId": {
+      "@id": "prove:correlationId",
+      "@type": "xsd:string"
+    },
+    "authToken": {
+      "@id": "prove:authToken",
+      "@type": "xsd:string"
+    },
+    "V3StartRequest": "prove:V3StartRequest",
+    "flowType": {
+      "@id": "prove:flowType",
+      "@type": "xsd:string"
+    },
+    "emailAddress": {
+      "@id": "prove:emailAddress",
+      "@type": "xsd:string"
+    },
+    "smsMessage": {
+      "@id": "prove:smsMessage",
+      "@type": "xsd:string"
+    },
+    "ipAddress": {
+      "@id": "prove:ipAddress",
+      "@type": "xsd:string"
+    },
+    "dob": {
+      "@id": "prove:dob",
+      "@type": "xsd:string"
+    },
+    "ssn": {
+      "@id": "prove:ssn",
+      "@type": "xsd:string"
+    },
+    "allowOTPRetry": {
+      "@id": "prove:allowOTPRetry",
+      "@type": "xsd:boolean"
+    },
+    "V3CompleteResponse": "prove:V3CompleteResponse",
+    "idv": {
+      "@id": "prove:idv"
+    },
+    "kyc": {
+      "@id": "prove:kyc"
+    },
+    "V3ValidateRequest": "prove:V3ValidateRequest",
+    "Individual": "prove:Individual",
+    "firstName": {
+      "@id": "prove:firstName",
+      "@type": "xsd:string"
+    },
+    "lastName": {
+      "@id": "prove:lastName",
+      "@type": "xsd:string"
+    },
+    "emailAddresses": {
+      "@id": "prove:emailAddresses",
+      "@container": "@list"
+    },
+    "addresses": {
+      "@id": "prove:addresses",
+      "@container": "@list"
+    },
+    "V3CompleteRequest": "prove:V3CompleteRequest",
+    "individual": {
+      "@id": "prove:individual",
+      "@type": "@id"
+    },
+    "V3ChallengeRequest": "prove:V3ChallengeRequest",
+    "Address": "prove:Address",
+    "address": {
+      "@id": "prove:address",
+      "@type": "xsd:string"
+    },
+    "city": {
+      "@id": "prove:city",
+      "@type": "xsd:string"
+    },
+    "region": {
+      "@id": "prove:region",
+      "@type": "xsd:string"
+    },
+    "postalCode": {
+      "@id": "prove:postalCode",
+      "@type": "xsd:string"
+    },
+    "V3FlowResponse": "prove:V3FlowResponse",
+    "DiscoverResponse": "prove:DiscoverResponse",
+    "attributes": {
+      "@id": "prove:attributes",
+      "@container": "@list"
+    },
+    "FetchResponse": "prove:FetchResponse",
+    "V3UnifyStatusResponse": "prove:V3UnifyStatusResponse",
+    "possessionResult": {
+      "@id": "prove:possessionResult",
+      "@type": "xsd:string"
+    },
+    "V3UnifyRequest": "prove:V3UnifyRequest",
+    "possessionType": {
+      "@id": "prove:possessionType",
+      "@type": "xsd:string"
+    },
+    "rebind": {
+      "@id": "prove:rebind",
+      "@type": "xsd:boolean"
+    },
+    "checkReputation": {
+      "@id": "prove:checkReputation",
+      "@type": "xsd:boolean"
+    },
+    "V3CorrelationRequest": "prove:V3CorrelationRequest"
+  },
+  "@type": "schema:Dataset",
+  "schema:name": "Prove API JSON-LD context",
+  "schema:description": "A JSON-LD @context for the objects Prove's own API contract declares: one class per component schema, one property per declared field, typed from the contract. Derived by script (derive-json-ld.py, 2026-10-08) from openapi/prove-auth-api-openapi.yml, openapi/prove-authentication-api-openapi.yml, openapi/prove-domain-api-openapi.yml.",
+  "dcterms:created": "2026-10-08",
+  "dcterms:source": [
+    "openapi/prove-auth-api-openapi.yml",
+    "openapi/prove-authentication-api-openapi.yml",
+    "openapi/prove-domain-api-openapi.yml",
+    "openapi/prove-identity-api-openapi.yml",
+    "openapi/prove-identity-verification-api-openapi.yml"
+  ]
+}
