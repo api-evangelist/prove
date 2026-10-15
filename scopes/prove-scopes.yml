@@ -1,8 +1,8 @@
-generated: '2026-10-08'
+generated: '2026-10-14'
 method: none
 source: openapi/prove-auth-api-openapi.yml, openapi/prove-authentication-api-openapi.yml, openapi/prove-domain-api-openapi.yml,
-  openapi/prove-identity-api-openapi.yml, openapi/prove-identity-verification-api-openapi.yml, openapi/prove-pre-fill-api-openapi.yml,
-  openapi/prove-trust-score-api-openapi.yml
+  openapi/prove-identity-api-openapi.yml, openapi/prove-identity-verification-api-openapi.yml,
+  openapi/prove-pre-fill-api-openapi.yml, openapi/prove-trust-score-api-openapi.yml
 schemes:
 - name: oauth2
   source: openapi/prove-auth-api-openapi.yml
@@ -40,6 +40,5 @@ schemes:
   - flow: clientCredentials
     tokenUrl: https://api.prove.com/v3/token
 scopes: []
-note: The contract declares an oauth2 clientCredentials flow with an empty scopes map and a bearerAuth scheme; no
-  scopes or permissions reference is readable (developer.prove.com/tutorial/access-api-keys redirects to /login).
-  Access is scoped per Portal project credential, not per OAuth scope.
+note: The OAuth2 security scheme(s) in the OpenAPI declare no scopes, and no security requirement
+  references one.
