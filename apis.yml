@@ -48,6 +48,8 @@ maintainers:
 - FN: Kin Lane
   email: kin@apievangelist.com
 common:
+- type: OAuthScopes
+  url: scopes/prove-scopes.yml
 - type: Plans
   url: plans/prove-plans-pricing.yml
 - type: RateLimits
