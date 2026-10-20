@@ -40,13 +40,13 @@ rfc9728:
     - https://developer.prove.com/mcp/oauth
 tools:
 - name: search_prove
-  title: Search documentation
   description: Search across the Prove knowledge base to find relevant information, code examples, API
     references, and guides. Use this tool when you need to answer questions about Prove, find specific
     documentation, understand how features work, or locate implementation details. The search returns
     contextual content with titles and direct links to the documentation pages. If you need the full content
     of a specific page, use the query_docs_filesystem tool to `head` or `cat` the page path (append `.mdx`
     to the path returned from search — e.g. a result at `/some/page` is read with `head -200 /some/page.mdx`).
+  title: Search documentation
   inputSchema:
     type: object
     properties:
@@ -61,7 +61,6 @@ tools:
     additionalProperties: false
   kind: documentation
 - name: query_docs_filesystem_prove
-  title: null
   description: 'Run a read-only shell-like query against a virtualized, in-memory filesystem rooted at
     `/` that contains ONLY the Prove documentation pages. This is NOT a shell on any real machine — nothing
     runs on the user''s computer, the server host, or any network. The filesystem is a sandbox backed
@@ -117,6 +116,7 @@ tools:
 
     When referencing pages in your response to the user, convert filesystem paths to URL paths by removing
     the `.mdx` extension. For example, `/some/page.mdx` becomes `/some/page`.'
+  title: null
   inputSchema:
     type: object
     properties:
@@ -129,11 +129,11 @@ tools:
     additionalProperties: false
   kind: documentation
 - name: submit_feedback
-  title: Submit documentation feedback
   description: Report a problem with this documentation site so the docs team can fix it. Use when a documentation
     page is incorrect, outdated, confusing, incomplete, or has a broken example. This is for feedback
     about the documentation content itself — not for product support requests or feedback about this tool
     or assistant.
+  title: Submit documentation feedback
   inputSchema:
     type: object
     properties:
@@ -181,3 +181,4 @@ tool_quality:
   scored: false
   note: Facts from the saved tools/list capture (mcp_tool_quality.py); recorded, not scored. Checks learned
     from Glimind's agent-readiness audit.
+tools_count: 3
